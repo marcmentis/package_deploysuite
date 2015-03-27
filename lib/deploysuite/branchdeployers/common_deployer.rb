@@ -40,7 +40,7 @@ module CommonDeployer
 	    r.run_merge_fetched_branch(args[:message])
 	    r.run_bundle
 	    r.run_precompile_assets
-	    # # DB HOOK
+	    # DB HOOK
 	    	update_app_db_functions(args) if args[:db]	
 	    r.run_start_application
 	    r.run_set_owned_file_privileges(args[:host_path])

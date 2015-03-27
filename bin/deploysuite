@@ -79,6 +79,8 @@ desc 'For existing app, update code with message. Update [db], [encrypted_file],
 command :update_app do |c|
   c.desc 'Provide message to describe update'
   c.flag [:m, :message]
+  c.desc 'Update db tables'
+  c.switch [:db]
   c.desc 'New encrypted file (new schema added usually)'
   c.switch [:encrypted_file]
   c.desc 'Run RSpec tests'
@@ -92,7 +94,7 @@ command :update_app do |c|
     end
 
     s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
-    switch_info = {command: "update_app", args: {host_path: global_options[:host_path], message: options[:message], rspec: options[:rspec], cucumber: options[:cucumber], encrypted_file: options[:encrypted_file]} }
+    switch_info = {command: "update_app", args: {host_path: global_options[:host_path], message: options[:message], db: options[:db], rspec: options[:rspec], cucumber: options[:cucumber], encrypted_file: options[:encrypted_file]} }
     s.send(switch_info)
 
     STDOUT.puts Rainbow("Success: 'update app' command completed").bright.green
