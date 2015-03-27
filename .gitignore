@@ -1,0 +1,9 @@
+#Ignore pkg
+/pkg
+/pkg/*
+
+# Ignore .bundle
+/.bundle
+/.bundle/*
+
+.DS_Store

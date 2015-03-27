@@ -1,0 +1,196 @@
+#!/usr/bin/env ruby
+require 'gli'
+require 'deploysuite'
+# require 'socket'
+# require 'open3'
+# require 'logger'
+# require 'rainbow'
+
+
+
+# begin # XXX: Remove this begin/rescue before distributing your app
+# require 'deploysuite'
+# rescue LoadError
+#   STDERR.puts "In development, you need to use `bundle exec bin/deploysuite` to run your app"
+#   STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
+#   STDERR.puts "Feel free to remove this message from bin/deploysuite now"
+#   exit 64
+# end
+
+include GLI::App
+include Deploysuite
+
+
+program_desc 'Command Suite to facilitate git deployment to DEV, QA and PROD servers'
+
+version Deploysuite::VERSION
+
+subcommand_option_handling :normal
+arguments :strict
+
+# desc 'Describe some switch here'
+# switch [:s,:switch]
+
+desc 'Absolute Path to App: /path/to/app (future or existing app)'
+# default_value 'the default'
+arg_name 'host_path'
+# flag [:f,:flagname]
+flag [:host_path]
+
+
+desc 'Clone appropriate repo branch and validate user, repo, path, app'
+# arg_name 'Describe arguments to clone_new_app here'
+# skips_pre  # Will skip the 'pre do' block for this command
+command :clone_new_app do |c|
+  c.desc 'URL to repo'
+  c.default_value 'git@github.com:account/repo'
+  c.flag [:repo, :r]
+  c.action do |global_options,options,args|
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    switch_info = {command: "clone_new_app1", args: {host_path: global_options[:host_path], repo: options[:repo]} }
+    s.send(switch_info)
+    
+
+    STDOUT.puts Rainbow("Success: 'Clone_new_app' command completed without error").bright.green
+    DeployLog.stdout_log.info {"Success: 'Clone_new_app' command completed without error"}
+
+  end
+end
+
+desc 'Complete the setup of newly cloned repo branch from within root dir'
+command :clone_new_app2 do |c|
+  c.desc 'Create DB or SQL code as appropriate'
+  c.switch [:db]  # --no-db is false by default
+  c.desc 'Run RSpec tests'
+  c.switch [:rspec] # --no-rspec is false by default
+  c.desc 'Run Cucumber tests'
+  c.switch [:cucumber]# --no-cucumber is false by default
+  c.action do |global_options,options|
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    switch_info = {command: "clone_new_app2", args: {host_path: global_options[:host_path], db: options[:db], rspec: options[:rspec], cucumber: options[:cucumber]} }
+    s.send(switch_info)
+
+    STDOUT.puts Rainbow("Success: 'clone_new_app2' command completed").bright.green
+    DeployLog.stdout_log.info {"Success: 'clone_new_app2' command completed"}
+  end
+end
+
+desc 'For existing app, update code with message. Update [db], [encrypted_file], [tests]'
+command :update_app do |c|
+  c.desc 'Provide message to describe update'
+  c.flag [:m, :message]
+  c.desc 'New encrypted file (new schema added usually)'
+  c.switch [:encrypted_file]
+  c.desc 'Run RSpec tests'
+  c.switch [:rspec] # --no-rspec is false by default
+  c.desc 'Run Cucumber tests'
+  c.switch [:cucumber]# --no-cucumber is false by default
+  c.action do |global_options,options,args|
+    if options[:message] == nil
+      $stdout.puts "ERROR: Need message flag [-m, --message=arg]"
+      exit 1
+    end
+
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    switch_info = {command: "update_app", args: {host_path: global_options[:host_path], message: options[:message], rspec: options[:rspec], cucumber: options[:cucumber], encrypted_file: options[:encrypted_file]} }
+    s.send(switch_info)
+
+    STDOUT.puts Rainbow("Success: 'update app' command completed").bright.green
+    DeployLog.stdout_log.info {"Success: 'update app' command completed"}
+    
+  end
+end
+
+desc 'Run RSpec tests on app'
+command :rspec do |c|
+  c.action do |global_options|
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    switch_info = {command: "rspec", args: {host_path: global_options[:host_path]} }
+    s.send(switch_info)
+
+  end
+end
+
+desc 'Run Cucumber tests on app'
+command :cucumber do |c|
+  c.action do |global_options|
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    switch_info = {command: "cucumber", args: {host_path: global_options[:host_path]} }
+    s.send(switch_info)
+    
+  end
+end
+
+desc 'Generate SQL for whole schema'
+command :schema_SQL do |c|
+  c.action do |global_options|
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    switch_info = {command: "db_structure_dump", args: {host_path: global_options[:host_path]} }
+    s.send(switch_info)
+  end
+  
+end
+
+desc 'Clone appropriate repo branch into valid server path'
+# arg_name 'Describe arguments to clone here'
+command :clone_branch do |c|
+  c.desc 'URL to repo'
+  c.default_value 'git@github.com:account/repo'
+  c.flag [:repo, :r]
+  c.action do |global_options,options,args|
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    switch_info = {command: "clone_branch", args: {host_path: global_options[:host_path], repo: options[:repo]} }
+    s.send(switch_info)
+
+    
+    
+
+    # STDOUT.puts "Success: 'Clone_branch' command completed"
+    # DeployLog.stdout_log.info {"Success: 'Clone_branch' command completed"}
+  end
+end
+
+
+
+desc 'Run bundle command for application production environment only'
+command :bundle do |c|
+  c.action do |global_options|
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    switch_info = {command: "bundle", args: {host_path: global_options[:host_path]} }
+    s.send(switch_info)
+  end
+  
+end
+
+pre do |global,command,options,args|
+  # Pre logic here
+  # Return true to proceed; false to abort and not call the
+  # chosen command
+  # Use skips_pre before a command to skip this block
+    # Usage.  Just write 'skips_pre' on line before 'command'
+  # on that command only
+  if $global_host.nil?
+    $global_host = global[:host_path]
+  end
+
+  if global[:host_path] == nil
+    $stdout.puts "ERROR: Need 'host_path' global flag"
+    exit 1
+  end
+
+  true
+end
+
+post do |global,command,options,args|
+  # Post logic here
+  # Use skips_post before a command to skip this
+  # block on that command only
+end
+
+on_error do |exception|
+  # Error logic here
+  # return false to skip default error handling
+  true
+end
+
+exit run(ARGV)

@@ -1,0 +1,5 @@
+= deploysuite
+
+Generate this with
+    deploysuite rdoc
+After you have described your command line interface
