@@ -32,9 +32,9 @@ module Deploysuite
 			open3method(cmd)
 		end
 
-		def db_rollback_all_migrations
+		def db_rollback_all_migrations			
 			cmd = "bundle exec rake db:migrate VERSION=0 RAILS_ENV=production"
-			open3method(cmd)
+			open3method(cmd)			
 		end
 
 		def rspec_tests

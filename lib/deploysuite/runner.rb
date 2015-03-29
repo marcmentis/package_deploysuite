@@ -186,6 +186,13 @@ module Deploysuite
 			$stdout.puts Rainbow("Success: privileges and grp ownership set for owned files").green
 		end
 
+		def run_make_temp_schema
+			u.make_temp_schema
+		end
+
+		def run_restore_old_schema
+			u.restore_old_schema
+		end
 		
 			
 	end

@@ -25,12 +25,12 @@ module Deploysuite
 		end
 
 		def set_app_group_ownership(host_path, final_deployer_group)
-			cmd = "`chown -R :#{final_deployer_group} #{host_path}`"
+			cmd = "chown -R :#{final_deployer_group} #{host_path}"
 			open3method(cmd)
 		end
 
 		def set_app_permissions(host_path)
-			cmd = "`chmod -R 775 #{host_path}`"
+			cmd = "chmod -R 775 #{host_path}"
 			open3method(cmd)
 		end
 
@@ -47,6 +47,16 @@ module Deploysuite
 			Dir.glob('**/*') do |f|
 				change_priv_if_owned(f, final_deployer_group)
 			end
+		end
+
+		def make_temp_schema
+			cmd = "cp db/schema.rb db/orig_schema.rb"
+			open3method(cmd)
+		end
+
+		def restore_old_schema
+			cmd = "mv db/orig_schema.rb db/schema.rb"
+			open3method(cmd)
 		end
 
 		def change_priv_if_owned(f, deployergroup)
