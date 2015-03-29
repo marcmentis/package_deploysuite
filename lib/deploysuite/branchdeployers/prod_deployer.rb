@@ -22,6 +22,7 @@ module Deploysuite
 			# Better method. Just give sql script after
 				# crating db tables normally
 			# r.run_generate_db_and_sql_script
+				# rake db:migrate:with_sql
 		end
 	end
 end
