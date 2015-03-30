@@ -3,7 +3,7 @@ require "spec_helper"
 module Deploysuite
 	describe Runner do
 
-		context "Message from Runner to RailsProxy to:" do
+		context "Outgoing message from Runner to RailsProxy to:" do
 			before(:each) do
 				@RailsProxy = double()  # RailsProxy object
 				# Pass RailsProxy double into Runner
@@ -54,7 +54,7 @@ module Deploysuite
 			end
 		end
 
-		context "Message from Runner to GitProxy to:" do
+		context "Outgoing message from Runner to GitProxy to:" do
 			before(:each) do
 				@GitProxy = double()  # GitProxy object
 				# Pass GitProxy double into Runner
@@ -73,7 +73,7 @@ module Deploysuite
 			end
 		end
 
-		context "Message from Runner to UtilProxy to:" do
+		context "Outgoing message from Runner to UtilProxy to:" do
 			before(:each) do
 				@UtilsProxy = double()  #UtilProxy object
 				@r = Runner.new(utils_proxy: @UtilsProxy)
@@ -82,7 +82,18 @@ module Deploysuite
 				@UtilsProxy.stub(:start_application)
 				@r.run_start_application()
 			end
-		end		
+		end	
+
+		context "Outgoing message from Runner to EncProxy" do
+			before(:each) do
+				@EncProxy = double()
+				@r = Runner.new(enc_proxy: @EncProxy)
+			end	
+			it "gets encoding parameters" do
+				@EncProxy.stub(:get_enc_params)
+				@r.run_get_enc_params('file')
+			end
+		end	
 		
 	end
 end

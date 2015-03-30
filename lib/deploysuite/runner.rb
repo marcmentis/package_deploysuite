@@ -1,6 +1,6 @@
 module Deploysuite
 	class Runner
-		attr_reader :v, :ev, :g, :u, :r
+		attr_reader :v, :ev, :g, :u, :r, :enc
 
 		def initialize(args={})
 			@v = args[:validator] 
@@ -8,6 +8,7 @@ module Deploysuite
 			@g = args[:git_proxy] 
 			@u = args[:utils_proxy]
 			@r = args[:rails_proxy]
+			@enc = args[:enc_proxy]
 		end
 
 		def run_move_secret_file(host_path)
@@ -192,6 +193,10 @@ module Deploysuite
 
 		def run_restore_old_schema
 			u.restore_old_schema
+		end
+
+		def run_get_enc_params(enc_param_yml_file)
+			enc_params = enc.get_enc_params(enc_param_yml_file)
 		end
 		
 			

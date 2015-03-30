@@ -2,6 +2,8 @@ require 'socket'
 require 'open3'
 require 'logger'
 require 'rainbow'
+require 'openssl'
+require 'yaml'
 
 # require 'deploysuite/proxy.rb'
 
