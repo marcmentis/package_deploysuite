@@ -58,6 +58,12 @@ module Deploysuite
 			end
 		end
 
+		def run_in_group?(group)
+			if v.in_group?(ev.user, ev.user_groups, group)
+				$stdout.puts Rainbow("Success: '#{ev.user}' is member of '#{group}' group").green
+			end
+		end
+
 		# Check that path to app is legal
 		def run_path_to_host_legal?(host_path)
 			if v.path_to_host_legal?(host_path)
@@ -195,8 +201,10 @@ module Deploysuite
 			u.restore_old_schema
 		end
 
-		def run_get_enc_params(enc_param_yml_file)
-			enc_params = enc.get_enc_params(enc_param_yml_file)
+		
+
+		def run_encrypt_from_db_source
+			enc.encrypt_from_db_source
 		end
 		
 			

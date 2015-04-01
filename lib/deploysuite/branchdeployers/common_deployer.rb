@@ -5,6 +5,10 @@ module CommonDeployer
 		@r = args[:runner]
 	end
 
+	def encrypt_db_source(args={})
+		r.run_in_group?('railsenc')
+	end
+
 	def clone_new_app1(args={})
 		r.run_in_final_deployer_group?(args[:host_path])
 		r.run_path_to_host_legal?(args[:host_path])

@@ -164,6 +164,17 @@ command :bundle do |c|
   
 end
 
+desc 'Encrypt relevant data from rails_database_source.yml'
+skips_pre
+command :encrypt_db_source do |c|
+  c.action do |global_options,options,args|
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    switch_info = {command: "encrypt_db_source", args: {} }
+    s.send(switch_info)
+
+  end
+end
+
 pre do |global,command,options,args|
   # Pre logic here
   # Return true to proceed; false to abort and not call the

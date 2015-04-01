@@ -20,6 +20,7 @@ require 'deploysuite/validator.rb'
 require 'deploysuite/proxies/git_proxy.rb'
 require 'deploysuite/proxies/utils_proxy.rb'
 require 'deploysuite/proxies/rails_proxy.rb'
+require 'deploysuite/proxies/enc_proxy'
 
 require 'deploysuite/branchdeployers/dev_deployer'
 require 'deploysuite/branchdeployers/qa_deployer'
