@@ -2,8 +2,8 @@ module Deploysuite
 	class EncProxy
 
 		def encrypt_from_db_source(git_branch, enc_config_path)
-			# # Will get this from proxies
 
+			# Get paths to relevant encryption config files
 			enc_paths = YAML.load(File.read(enc_config_path))
 			cipher_source_yml = enc_paths['paths']['cipher_source_yml']
 			database_source_yml = enc_paths['paths']['database_source_yml']
@@ -12,46 +12,33 @@ module Deploysuite
 			decryption_test_yml = enc_paths['paths']['decryption_test_yml']
 
 
-			# cipher_source_yml = '/rails/.config/rails_cipher_source.yml'
-			# database_source_yml = '/rails/.vault/rails_database_source.yml'
-			# temp_db_sourc_yml = '/rails/.config/temp_branch.yml'
-			# enc_database_yml = '/rails/.config/enc_database.yml'
-			# decryption_test_yml = '/rails/.config/de-encryption_test.yml'
-
-			# Get Common and Appropriate data for git_branch
+			# Get Common and Appropriate data for git_branch from database_source.yml
 			db_values = YAML.load(File.read(database_source_yml))
-			# puts "DbValues: \n #{DbValues}"
 			common_hash = db_values.fetch('common')
-			# puts "common_hash:\n #{common_hash}"
 			branch_hash = db_values.fetch(git_branch)
-			# puts "branch_hash: \n #{branch_hash}"
 			merged_hash = common_hash.merge!(branch_hash)
-			# puts "merged_hash: \n #{merged_hash}"
 			merged_hash_to_yaml = merged_hash.to_yaml
-			# puts "merged_hash_to_yaml: \n #{merged_hash_to_yaml}"
+				# puts "DbValues: \n #{DbValues}"			
+				# puts "common_hash:\n #{common_hash}"			
+				# puts "branch_hash: \n #{branch_hash}"			
+				# puts "merged_hash: \n #{merged_hash}"			
+				# puts "merged_hash_to_yaml: \n #{merged_hash_to_yaml}"
 
+			# Create a temp file containing encryption data relevant for git_branch
 			File.open(temp_db_sourc_yml, 'w') do |f|
 				f.write(merged_hash_to_yaml)
 			end
 
-
-
 			# Get Key, iv, and algorithym from rails_cipher_source.yml
-				cipher_params = YAML.load(File.read(cipher_source_yml))
-				key = cipher_params['key']
-				iv = cipher_params['iv']
-				alg =cipher_params['alg']
+				cipher_params = get_cipher_params(cipher_source_yml)
+				
 
-				# puts "key: #{key}"
-				# puts "iv: #{iv}"
-				# puts "alg: #{alg}"
-
-			# Create the enc_database.yml file. DB GROUP FUNCTION
+			# Encrypt the temp file to create enc_database.yml file. 
 			# Create instance of cipher for encrypting
-				cipher = OpenSSL::Cipher.new(alg)
+				cipher = OpenSSL::Cipher.new(cipher_params[:alg])
 				cipher.encrypt
-				cipher.key = key
-				cipher.iv = iv
+				cipher.key = cipher_params[:key]
+				cipher.iv = cipher_params[:iv]
 
 				# aes encode database.yml into enc_database.yml file.
 				#?? Set chown & chmod of ENCRYPTED_FILE
@@ -59,25 +46,22 @@ module Deploysuite
 					File.open(temp_db_sourc_yml) do |f|
 						loop do
 							r = f.read(4096)
-							break unless r
-								
+							break unless r							
 							encoded = cipher.update(r)
-							enc << encoded
-							
+							enc << encoded							
 						end
 					end
-
 					enc << cipher.final
 				end
-			# # Remove the temp branch .yml file
+			# Remove the temp file
 			File.delete(temp_db_sourc_yml)
 
 			# Test decode
 				# Create decipher instance with "alg" characteristics
-					decipher = OpenSSL::Cipher.new(alg)
+					decipher = OpenSSL::Cipher.new(cipher_params[:alg])
 					decipher.decrypt
-					decipher.key = key
-					decipher.iv = iv
+					decipher.key = cipher_params[:key]
+					decipher.iv = cipher_params[:iv]
 				# Decode enc_application.yml file into dec_test.yml file
 					File.open(decryption_test_yml, 'wb') do |dec|
 					    File.open(enc_database_yml, 'rb') do |f|
@@ -88,19 +72,19 @@ module Deploysuite
 					            dec << decoded
 					        end
 					    end
-
 					    dec << decipher.final
-					end	
-
-			
+					end				
 		end
 
-		def get_enc_params(enc_params_yaml_file)
-			# Enc_params = YAML.load(File.read(enc_params_yaml_file))
-			# key = Enc_params['key']
-			# iv = Enc_params['iv']
-			# alg =Enc_params['alg']
-			# return {key: key, iv: iv, alg: alg}
+		def get_cipher_params(cipher_source_yml)
+			cipher_params = YAML.load(File.read(cipher_source_yml))
+			key = cipher_params['key']
+			iv = cipher_params['iv']
+			alg =cipher_params['alg']
+				# puts "key: #{key}"
+				# puts "iv: #{iv}"
+				# puts "alg: #{alg}"
+			return {key: key, iv: iv, alg: alg}
 		end
 	end
 end
