@@ -1,6 +1,6 @@
 module Deploysuite
 	class Runner
-		attr_reader :v, :ev, :g, :u, :r
+		attr_reader :v, :ev, :g, :u, :r, :enc
 
 		def initialize(args={})
 			@v = args[:validator] 
@@ -8,6 +8,7 @@ module Deploysuite
 			@g = args[:git_proxy] 
 			@u = args[:utils_proxy]
 			@r = args[:rails_proxy]
+			@enc = args[:enc_proxy]
 		end
 
 		def run_move_secret_file(host_path)
@@ -54,6 +55,12 @@ module Deploysuite
 				$stdout.puts Rainbow("Success: '#{ev.user}' is member of 'railsdep' group").green
 			else
 				exit 1
+			end
+		end
+
+		def run_in_group?(group)
+			if v.in_group?(ev.user, ev.user_groups, group)
+				$stdout.puts Rainbow("Success: '#{ev.user}' has appropriate privileges").green
 			end
 		end
 
@@ -192,6 +199,14 @@ module Deploysuite
 
 		def run_restore_old_schema
 			u.restore_old_schema
+		end
+
+		
+
+		def run_encrypt_from_db_source(enc_config_path)
+			branch = v.get_git_branch(ev.machine_name)
+			enc.encrypt_from_db_source(branch, enc_config_path)
+			$stdout.puts Rainbow("Success: encrypted database file created").green
 		end
 		
 			

@@ -175,4 +175,18 @@ Then(/^send message to set group ownership and privileges for owned files$/) do
 	runner.run_set_owned_file_privileges('/tmp/testapp')
 end
 
+Given(/^user belongs to railsenc group$/) do
+  	v = double()
+  	v.stub(:in_group?)
+  	runner = Runner.new(validator: v, env_values: EnvValues.new)
+	runner.run_in_group?('railsenc')
+end
+
+Then(/^send message to extract and encrypt data from database source$/) do
+  	enc = double()
+  	enc.stub(:encrypt_from_db_source)
+  	runner = Runner.new(enc_proxy: enc)
+	runner.run_encrypt_from_db_source
+end
+
 

@@ -79,6 +79,16 @@ module Deploysuite
 			end
 		end
 
+		def in_group?(user, user_groups, group)
+			if user_groups.include? group
+				true
+			else
+				DeployLog.stderr_log.fatal {"'#{user}' is not a member of '#{group}' group on this server"}
+				STDERR.puts Rainbow("ERROR: '#{user}' is not a member of '#{group}' group on this server").red				
+				return false
+			end
+		end
+
 		def secret_config1?(host_path)
 			app_name = get_app_name(host_path)
 			secret_config1 = "#{app_name}_enc_application.yml"
