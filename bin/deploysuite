@@ -167,9 +167,11 @@ end
 desc 'Encrypt relevant data from rails_database_source.yml'
 skips_pre
 command :encrypt_db_source do |c|
+  c.desc 'Path to encryption config file'
+  c.flag [:encryption_config_path]
   c.action do |global_options,options,args|
     s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
-    switch_info = {command: "encrypt_db_source", args: {} }
+    switch_info = {command: "encrypt_db_source", args: {enc_config_path: options[:encryption_config_path]} }
     s.send(switch_info)
 
   end

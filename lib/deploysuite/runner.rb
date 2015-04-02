@@ -60,7 +60,7 @@ module Deploysuite
 
 		def run_in_group?(group)
 			if v.in_group?(ev.user, ev.user_groups, group)
-				$stdout.puts Rainbow("Success: '#{ev.user}' is member of '#{group}' group").green
+				$stdout.puts Rainbow("Success: '#{ev.user}' has appropriate privileges").green
 			end
 		end
 
@@ -203,8 +203,10 @@ module Deploysuite
 
 		
 
-		def run_encrypt_from_db_source
-			enc.encrypt_from_db_source
+		def run_encrypt_from_db_source(enc_config_path)
+			branch = v.get_git_branch(ev.machine_name)
+			enc.encrypt_from_db_source(branch, enc_config_path)
+			$stdout.puts Rainbow("Success: encrypted file created from database_source").green
 		end
 		
 			

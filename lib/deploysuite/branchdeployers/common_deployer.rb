@@ -7,7 +7,7 @@ module CommonDeployer
 
 	def encrypt_db_source(args={})
 		r.run_in_group?('railsenc')
-		r.run_encrypt_from_db_source
+		r.run_encrypt_from_db_source(args[:enc_config_path])
 	end
 
 	def clone_new_app1(args={})

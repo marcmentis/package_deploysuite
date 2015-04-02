@@ -1,31 +1,34 @@
 module Deploysuite
 	class EncProxy
 
-		def encrypt_from_db_source
+		def encrypt_from_db_source(git_branch, enc_config_path)
 			# # Will get this from proxies
-			# CipherSourceYml = 'rails_cipher_source.yml'
-			# DatabaseSourceYml = 'rails_database_source.yml'
-			# EncDatabaseYml = 'enc_database.yml'
-			# Branch = 'dev'
-			cipher_source_yml = '/rails/.config/rails_cipher_source.yml'
-			database_source_yml = '/rails/.config/rails_database_source.yml'
-			temp_db_sourc_yml = '/rails/.config/temp_branch.yml'
-			enc_database_yml = '/rails/.config/enc_database.yml'
-			branch = 'dev'
 
-			decryption_test_yml = '/rails/.config/de-encryption_test.yml'
+			enc_paths = YAML.load(File.read(enc_config_path))
+			cipher_source_yml = enc_paths['paths']['cipher_source_yml']
+			database_source_yml = enc_paths['paths']['database_source_yml']
+			temp_db_sourc_yml = enc_paths['paths']['temp_db_sourc_yml']
+			enc_database_yml = enc_paths['paths']['enc_database_yml']
+			decryption_test_yml = enc_paths['paths']['decryption_test_yml']
 
-			# Get Common and Appropriate branch
+
+			# cipher_source_yml = '/rails/.config/rails_cipher_source.yml'
+			# database_source_yml = '/rails/.vault/rails_database_source.yml'
+			# temp_db_sourc_yml = '/rails/.config/temp_branch.yml'
+			# enc_database_yml = '/rails/.config/enc_database.yml'
+			# decryption_test_yml = '/rails/.config/de-encryption_test.yml'
+
+			# Get Common and Appropriate data for git_branch
 			db_values = YAML.load(File.read(database_source_yml))
 			# puts "DbValues: \n #{DbValues}"
 			common_hash = db_values.fetch('common')
-			puts "common_hash:\n #{common_hash}"
-			branch_hash = db_values.fetch(branch)
-			puts "branch_hash: \n #{branch_hash}"
+			# puts "common_hash:\n #{common_hash}"
+			branch_hash = db_values.fetch(git_branch)
+			# puts "branch_hash: \n #{branch_hash}"
 			merged_hash = common_hash.merge!(branch_hash)
-			puts "merged_hash: \n #{merged_hash}"
+			# puts "merged_hash: \n #{merged_hash}"
 			merged_hash_to_yaml = merged_hash.to_yaml
-			puts "merged_hash_to_yaml: \n #{merged_hash_to_yaml}"
+			# puts "merged_hash_to_yaml: \n #{merged_hash_to_yaml}"
 
 			File.open(temp_db_sourc_yml, 'w') do |f|
 				f.write(merged_hash_to_yaml)
@@ -39,9 +42,9 @@ module Deploysuite
 				iv = cipher_params['iv']
 				alg =cipher_params['alg']
 
-				puts "key: #{key}"
-				puts "iv: #{iv}"
-				puts "alg: #{alg}"
+				# puts "key: #{key}"
+				# puts "iv: #{iv}"
+				# puts "alg: #{alg}"
 
 			# Create the enc_database.yml file. DB GROUP FUNCTION
 			# Create instance of cipher for encrypting
