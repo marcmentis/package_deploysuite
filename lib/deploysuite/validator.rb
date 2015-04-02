@@ -55,17 +55,65 @@ module Deploysuite
 		end
 
 		def get_git_branch(machine_name)
-			case machine_name
-				when "omhrord1.omh.ny.gov", "u14dev", "marcs-mbp"
-					@git_branch = 'dev'
-				when "omhrorq1.omh.ny.gov", "u14qa"
-					@git_branch = 'qa'
-				when "omhrorp1.omh.ny.gov", "u14prod"
-					@git_branch = 'master'
-				else
-					STDERR.puts Rainbow("ERROR: This machine '#{machine_name}' does NOT have permission to run this app.").red
-					exit 1
+			deploysuite_config = YAML.load(File.open('/rails/.deploysuite_config/deploysuite_config.yml'))
+			dev_machines = deploysuite_config['machine_deploy_levels']['dev']
+			qa_machines = deploysuite_config['machine_deploy_levels']['qa']
+			prod_machines = deploysuite_config['machine_deploy_levels']['prod']
+
+			if dev_machines.include?(machine_name)
+				return 'dev'
+			elsif qa_machines.include?(machine_name)
+				return 'qa'
+			elsif prod_machines.include?(machine_name)
+				return 'master'
+			else
+				STDERR.puts Rainbow("ERROR: This machine '#{machine_name}' does NOT have permission to run this app.").red
+		 		exit 1
 			end
+
+
+			# case machine_name
+			# 	when "omhrord1.omh.ny.gov", "u14dev", "marcs-mbp"
+			# 		@git_branch = 'dev'
+			# 	when "omhrorq1.omh.ny.gov", "u14qa"
+			# 		@git_branch = 'qa'
+			# 	when "omhrorp1.omh.ny.gov", "u14prod"
+			# 		@git_branch = 'master'
+			# 	else
+			# 		STDERR.puts Rainbow("ERROR: This machine '#{machine_name}' does NOT have permission to run this app.").red
+			# 		exit 1
+			# end
+		end
+
+		def get_machine_deployment_level(machine_name)
+			deploysuite_config = YAML.load(File.open('/rails/.deploysuite_config/deploysuite_config.yml'))
+			dev_machines = deploysuite_config['machine_deploy_levels']['dev']
+			qa_machines = deploysuite_config['machine_deploy_levels']['qa']
+			prod_machines = deploysuite_config['machine_deploy_levels']['prod']
+
+			if dev_machines.include?(machine_name)
+				return 'dev'
+			elsif qa_machines.include?(machine_name)
+				return 'qa'
+			elsif prod_machines.include?(machine_name)
+				return 'prod'
+			else
+				STDERR.puts Rainbow("ERROR: This machine '#{machine_name}' does NOT have permission to run this app.").red
+		 		exit 1
+			end
+
+
+			# case machine_name
+			# 	when "omhrord1.omh.ny.gov", "u14dev", "marcs-mbp"
+			# 		machine_level = 'dev'
+			# 	when "omhrorq1.omh.ny.gov", "u14qa"
+			# 		machine_level = 'qa'
+			# 	when "omhrorp1.omh.ny.gov", "u14prod"
+			# 		machine_level = 'prod'
+			# 	else
+			# 		STDERR.puts Rainbow("ERROR: This machine '#{machine_name}' does NOT have permission to run this app.").red
+			# 		exit 1
+			# end
 		end
 
 		def in_final_deployer_group?(user, user_groups, host_path)

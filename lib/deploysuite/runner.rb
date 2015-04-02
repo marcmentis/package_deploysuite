@@ -204,8 +204,8 @@ module Deploysuite
 		
 
 		def run_encrypt_from_db_source(enc_config_path)
-			branch = v.get_git_branch(ev.machine_name)
-			enc.encrypt_from_db_source(branch, enc_config_path)
+			deploy_level = v.get_machine_deployment_level(ev.machine_name)
+			enc.encrypt_from_db_source(deploy_level, enc_config_path)
 			$stdout.puts Rainbow("Success: encrypted database file created").green
 		end
 		

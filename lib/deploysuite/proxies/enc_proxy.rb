@@ -1,7 +1,7 @@
 module Deploysuite
 	class EncProxy
 
-		def encrypt_from_db_source(git_branch, enc_config_path)
+		def encrypt_from_db_source(deploy_level, enc_config_path)
 
 			# Get paths to relevant encryption config files
 			enc_paths = YAML.load(File.read(enc_config_path))
@@ -12,19 +12,19 @@ module Deploysuite
 			decryption_test_yml = enc_paths['paths']['decryption_test_yml']
 
 
-			# Get Common and Appropriate data for git_branch from database_source.yml
+			# Get Common and Appropriate data for deploy_level from database_source.yml
 			db_values = YAML.load(File.read(database_source_yml))
 			common_hash = db_values.fetch('common')
-			branch_hash = db_values.fetch(git_branch)
-			merged_hash = common_hash.merge!(branch_hash)
+			deploy_level_hash = db_values.fetch(deploy_level)
+			merged_hash = common_hash.merge!(deploy_level_hash)
 			merged_hash_to_yaml = merged_hash.to_yaml
 				# puts "DbValues: \n #{DbValues}"			
 				# puts "common_hash:\n #{common_hash}"			
-				# puts "branch_hash: \n #{branch_hash}"			
+				# puts "deploy_level_hash: \n #{deploy_level_hash}"			
 				# puts "merged_hash: \n #{merged_hash}"			
 				# puts "merged_hash_to_yaml: \n #{merged_hash_to_yaml}"
 
-			# Create a temp file containing encryption data relevant for git_branch
+			# Create a temp file containing encryption data relevant for deploy_level
 			File.open(temp_db_sourc_yml, 'w') do |f|
 				f.write(merged_hash_to_yaml)
 			end
