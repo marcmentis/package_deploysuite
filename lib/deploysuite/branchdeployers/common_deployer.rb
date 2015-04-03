@@ -24,8 +24,8 @@ module CommonDeployer
 	def clone_new_app2(args={})
 		r.run_check_pwd(args[:host_path])
 	    r.run_bundle
-	    r.run_precompile_assets
 	    r.run_create_deploy_level_db_params(args[:path_to_files_config])
+	    r.run_precompile_assets
 	    # HOOK for db functions
 	    	clone_app_db_functions(args) if args[:db]	    
 	    r.run_start_application
@@ -46,8 +46,8 @@ module CommonDeployer
 	    r.run_stash_local_changes	    
 	    r.run_merge_fetched_branch(args[:message])
 	    r.run_bundle
-	    r.run_precompile_assets
 	    r.run_create_deploy_level_db_params(args[:path_to_files_config])
+	    r.run_precompile_assets
 	    # DB HOOK
 	    	update_app_db_functions(args) if args[:db]	
 	    r.run_start_application
