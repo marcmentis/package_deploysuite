@@ -1,6 +1,6 @@
 module Deploysuite
 	class Runner
-		attr_reader :v, :ev, :g, :u, :r, :enc
+		attr_reader :v, :ev, :g, :u, :r, :db, :enc
 
 		def initialize(args={})
 			@v = args[:validator] 
@@ -8,6 +8,7 @@ module Deploysuite
 			@g = args[:git_proxy] 
 			@u = args[:utils_proxy]
 			@r = args[:rails_proxy]
+			@db = args[:db_manager]
 			@enc = args[:enc_proxy]
 		end
 
@@ -199,6 +200,27 @@ module Deploysuite
 
 		def run_restore_old_schema
 			u.restore_old_schema
+		end
+
+		def run_create_deploy_level_db_params(rails_files_config)
+			deploy_level = v.get_machine_deployment_level(ev.machine_name)
+			db.create_deploy_level_db_params(deploy_level, rails_files_config)
+			$stdout.puts Rainbow("Success: Db params created for #{deploy_level}").green
+		end
+
+		def run_destroy_deploy_level_db_params(rails_files_config)
+			db.destroy_deploy_level_db_params(rails_files_config)
+			$stdout.puts Rainbow("Success: Temp db_params file destroyed").green
+		end
+
+		def run_copy_sqlrake_file(host_path, rails_files_config)
+			u.copy_sqlrake_file(host_path, rails_files_config)
+			$stdout.puts Rainbow("Success: sql.rake copied to app: #{host_path}").green
+		end
+
+		def run_remove_sqlrake_file(host_path)
+			u.remove_sqlrake_file(host_path)
+			$stdout.puts Rainbow("Success: sql.rake removed from app: #{host_path}").green
 		end
 
 		

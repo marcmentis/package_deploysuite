@@ -61,6 +61,8 @@ desc 'Complete the setup of newly cloned repo branch from within root dir'
 command :clone_new_app2 do |c|
   c.desc 'Create DB or SQL code as appropriate'
   c.switch [:db]  # --no-db is false by default
+  c.desc 'Path to Rails_files_config.yml'
+  c.flag [:p, :path_to_files_config]
   c.desc 'Run RSpec tests'
   c.switch [:rspec] # --no-rspec is false by default
   c.desc 'Run Cucumber tests'

@@ -73,5 +73,20 @@ module Deploysuite
 
 			end
 		end
+
+		def copy_sqlrake_file(host_path, rails_files_config)
+			# Get paths to relevant db management files
+			files_config = YAML.load(File.read(rails_files_config))
+			file = files_config['paths']['sql_rake']
+			final_path = "#{host_path}/lib/tasks/sql.rake"
+			cmd = "cp #{file} #{final_path}"
+			open3method(cmd)
+		end
+
+		def remove_sqlrake_file(host_path)
+			final_path = "#{host_path}/lib/tasks/sql.rake"
+			cmd = "rm #{final_path}"
+			open3method(cmd)
+		end
 	end
 end

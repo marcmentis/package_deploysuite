@@ -17,7 +17,9 @@ module Deploysuite
 		end
 
 		def update_app_db_functions(args)
+			r.run_copy_sqlrake_file(args[:host_path], args[:path_to_files_config])
 			r.run_generate_sql_script
+			r.run_remove_sqlrake_file(args[:host_path])
 
 			# Better method. Just give sql script after
 				# crating db tables normally
