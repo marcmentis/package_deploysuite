@@ -61,15 +61,15 @@ desc 'Complete the setup of newly cloned repo branch from within root dir'
 command :clone_new_app2 do |c|
   c.desc 'Create DB or SQL code as appropriate'
   c.switch [:db]  # --no-db is false by default
-  c.desc 'Path to Rails_files_config.yml'
-  c.flag [:p, :path_to_files_config]
   c.desc 'Run RSpec tests'
   c.switch [:rspec] # --no-rspec is false by default
   c.desc 'Run Cucumber tests'
   c.switch [:cucumber]# --no-cucumber is false by default
+  c.desc 'Path to Rails_files_config.yml'
+  c.flag [:p, :path_to_files_config]
   c.action do |global_options,options|
     s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
-    switch_info = {command: "clone_new_app2", args: {host_path: global_options[:host_path], db: options[:db], rspec: options[:rspec], cucumber: options[:cucumber]} }
+    switch_info = {command: "clone_new_app2", args: {host_path: global_options[:host_path], db: options[:db], rspec: options[:rspec], cucumber: options[:cucumber], path_to_files_config: options[:path_to_files_config]} }
     s.send(switch_info)
 
     STDOUT.puts Rainbow("Success: 'clone_new_app2' command completed").bright.green
@@ -89,6 +89,8 @@ command :update_app do |c|
   c.switch [:rspec] # --no-rspec is false by default
   c.desc 'Run Cucumber tests'
   c.switch [:cucumber]# --no-cucumber is false by default
+  c.desc 'Path to Rails_files_config.yml'
+  c.flag [:p, :path_to_files_config]
   c.action do |global_options,options,args|
     if options[:message] == nil
       $stdout.puts "ERROR: Need message flag [-m, --message=arg]"
@@ -96,7 +98,7 @@ command :update_app do |c|
     end
 
     s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
-    switch_info = {command: "update_app", args: {host_path: global_options[:host_path], message: options[:message], db: options[:db], rspec: options[:rspec], cucumber: options[:cucumber], encrypted_file: options[:encrypted_file]} }
+    switch_info = {command: "update_app", args: {host_path: global_options[:host_path], message: options[:message], db: options[:db], rspec: options[:rspec], cucumber: options[:cucumber], encrypted_file: options[:encrypted_file], path_to_files_config: options[:path_to_files_config]} }
     s.send(switch_info)
 
     STDOUT.puts Rainbow("Success: 'update app' command completed").bright.green
