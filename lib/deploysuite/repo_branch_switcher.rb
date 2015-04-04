@@ -21,17 +21,17 @@ module Deploysuite
 			case git_branch
 			    when "dev"
 			    	# puts "In dev"
-			    	dev = DevDeployer.new({runner: Runner.new(rails_proxy: RailsProxy.new, validator: Validator.new, env_values: EnvValues.new, git_proxy: GitProxy.new, utils_proxy: UtilsProxy.new, db_manager: DbManager.new, enc_proxy: EncProxy.new)})
+			    	dev = DevDeployer.new({runner: Runner.new(rails_proxy: RailsProxy.new, validator: Validator.new, env_values: EnvValues.new, git_proxy: GitProxy.new, utils_proxy: UtilsProxy.new, encryptor: Encryptor.new)})
 					whole_message = "dev.#{command}(#{args})"
 					eval(whole_message)
 			    when "qa"
 			    	# puts "In qa"
-			    	qa = QaDeployer.new({runner: Runner.new(rails_proxy: RailsProxy.new, validator: Validator.new, env_values: EnvValues.new, git_proxy: GitProxy.new, utils_proxy: UtilsProxy.new, db_manager: DbManager.new, enc_proxy: EncProxy.new)})
+			    	qa = QaDeployer.new({runner: Runner.new(rails_proxy: RailsProxy.new, validator: Validator.new, env_values: EnvValues.new, git_proxy: GitProxy.new, utils_proxy: UtilsProxy.new, encryptor: Encryptor.new)})
 			    	whole_message = "qa.#{command}(#{args})"
 					eval(whole_message)
 			    when "master"
 			    	# puts "In prod"
-			    	prod = ProdDeployer.new({runner: Runner.new(rails_proxy: RailsProxy.new, validator: Validator.new, env_values: EnvValues.new, git_proxy: GitProxy.new, utils_proxy: UtilsProxy.new, db_manager: DbManager.new, enc_proxy: EncProxy.new)})
+			    	prod = ProdDeployer.new({runner: Runner.new(rails_proxy: RailsProxy.new, validator: Validator.new, env_values: EnvValues.new, git_proxy: GitProxy.new, utils_proxy: UtilsProxy.new, encryptor: Encryptor.new)})
 			    	whole_message = "prod.#{command}(#{args})"
 					eval(whole_message)
 			    else

@@ -93,7 +93,7 @@ command :update_app do |c|
   c.flag [:p, :path_to_files_config]
   c.action do |global_options,options,args|
     if options[:message] == nil
-      $stdout.puts "ERROR: Need message flag [-m, --message=arg]"
+      $stdout.puts Rainbow("ERROR: Need message flag [-m, --message=arg]").red
       exit 1
     end
 
@@ -168,14 +168,18 @@ command :bundle do |c|
   
 end
 
-desc 'Encrypt relevant data from rails_database_source.yml'
+desc 'Encrypt deploy-level specific data from rails_db.yml'
 skips_pre
-command :encrypt_db_source do |c|
-  c.desc 'Path to encryption config file'
-  c.flag [:encryption_config_path]
+command :encrypt_db do |c|
+  c.desc 'Path to rails_ymlfiles.yml'
+  c.flag [:y, :ymlfiles]
   c.action do |global_options,options,args|
+    if options[:y] == nil
+      $stdout.puts Rainbow("ERROR: Need path to yml files flag [:y, :ymlfiles]").red
+      exit 1
+    end
     s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
-    switch_info = {command: "encrypt_db_source", args: {enc_config_path: options[:encryption_config_path]} }
+    switch_info = {command: "encrypt_db", args: {ymlfiles_yml: options[:ymlfiles]} }
     s.send(switch_info)
 
   end
@@ -193,7 +197,7 @@ pre do |global,command,options,args|
   end
 
   if global[:host_path] == nil
-    $stdout.puts "ERROR: Need 'host_path' global flag"
+    $stdout.puts Rainbow("ERROR: Need 'host_path' global flag").red
     exit 1
   end
 

@@ -1,6 +1,6 @@
 module Deploysuite
 	class Runner
-		attr_reader :v, :ev, :g, :u, :r, :db, :enc
+		attr_reader :v, :ev, :g, :u, :r, :encr
 
 		def initialize(args={})
 			@v = args[:validator] 
@@ -8,8 +8,7 @@ module Deploysuite
 			@g = args[:git_proxy] 
 			@u = args[:utils_proxy]
 			@r = args[:rails_proxy]
-			@db = args[:db_manager]
-			@enc = args[:enc_proxy]
+			@encr = args[:encryptor]
 		end
 
 		def run_move_secret_file(host_path)
@@ -202,17 +201,6 @@ module Deploysuite
 			u.restore_old_schema
 		end
 
-		def run_create_deploy_level_db_params(rails_files_config)
-			deploy_level = v.get_machine_deployment_level(ev.machine_name)
-			db.create_deploy_level_db_params(deploy_level, rails_files_config)
-			$stdout.puts Rainbow("Success: Db params created for #{deploy_level}").green
-		end
-
-		def run_destroy_deploy_level_db_params(rails_files_config)
-			db.destroy_deploy_level_db_params(rails_files_config)
-			$stdout.puts Rainbow("Success: Temp db_params file destroyed").green
-		end
-
 		def run_copy_sqlrake_file(host_path, rails_files_config)
 			u.copy_sqlrake_file(host_path, rails_files_config)
 			$stdout.puts Rainbow("Success: sql.rake copied to app: #{host_path}").green
@@ -225,9 +213,9 @@ module Deploysuite
 
 		
 
-		def run_encrypt_from_db_source(enc_config_path)
+		def run_encrypt_from_rails_db_yml(ymlfiles_yml)
 			deploy_level = v.get_machine_deployment_level(ev.machine_name)
-			enc.encrypt_from_db_source(deploy_level, enc_config_path)
+			encr.encrypt_from_rails_db_yml(deploy_level, ymlfiles_yml)
 			$stdout.puts Rainbow("Success: encrypted database file created").green
 		end
 		

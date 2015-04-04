@@ -5,9 +5,9 @@ module CommonDeployer
 		@r = args[:runner]
 	end
 
-	def encrypt_db_source(args={})
+	def encrypt_db(args={})
 		r.run_in_group?('railsenc')
-		r.run_encrypt_from_db_source(args[:enc_config_path])
+		r.run_encrypt_from_rails_db_yml(args[:ymlfiles_yml])
 	end
 
 	def clone_new_app1(args={})
@@ -24,12 +24,12 @@ module CommonDeployer
 	def clone_new_app2(args={})
 		r.run_check_pwd(args[:host_path])
 	    r.run_bundle
-	    r.run_create_deploy_level_db_params(args[:path_to_files_config])
+	    # r.run_create_deploy_level_db_params(args[:path_to_files_config])
 	    r.run_precompile_assets
 	    # HOOK for db functions
 	    	clone_app_db_functions(args) if args[:db]	    
 	    r.run_start_application
-	    r.run_destroy_deploy_level_db_params(args[:path_to_files_config])
+	    # r.run_destroy_deploy_level_db_params(args[:path_to_files_config])
 	    r.run_first_commit
 	    r.run_set_app_privileges_ownership(args[:host_path])
 	    r.run_rspec_tests if args[:rspec]
@@ -40,18 +40,18 @@ module CommonDeployer
 	def update_app(args={})	
 		r.run_check_pwd(args[:host_path])
 		r.run_fetch_branch_from_origin
-		r.run_secret_config1?(args[:host_path]) if args[:encrypted_file]
-		r.run_move_secret_file(args[:host_path]) if args[:encrypted_file]
+		# r.run_secret_config1?(args[:host_path]) if args[:encrypted_file]
+		# r.run_move_secret_file(args[:host_path]) if args[:encrypted_file]
 	    r.run_clobber_assets
 	    r.run_stash_local_changes	    
 	    r.run_merge_fetched_branch(args[:message])
 	    r.run_bundle
-	    r.run_create_deploy_level_db_params(args[:path_to_files_config])
+	    # r.run_create_deploy_level_db_params(args[:path_to_files_config])
 	    r.run_precompile_assets
 	    # DB HOOK
 	    	update_app_db_functions(args) if args[:db]	
 	    r.run_start_application
-	    r.run_destroy_deploy_level_db_params(args[:path_to_files_config])
+	    # r.run_destroy_deploy_level_db_params(args[:path_to_files_config])
 	    r.run_set_owned_file_privileges(args[:host_path])
 	    r.run_rspec_tests if args[:rspec]
 	    r.run_cucumber_tests if args[:cucumber]	
