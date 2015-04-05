@@ -20,6 +20,8 @@ require 'deploysuite'
 include GLI::App
 include Deploysuite
 
+config_file File.join('/rails/.deploysuite','deploysuit.rc.yaml')
+
 
 program_desc 'Command Suite to facilitate git deployment to DEV, QA and PROD servers'
 

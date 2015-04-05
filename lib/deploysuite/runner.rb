@@ -94,6 +94,7 @@ module Deploysuite
 
 		def run_clone_branch(repo, host_path)
 		    git_branch = v.get_git_branch(ev.machine_name)
+
 		    g.clone_branch(git_branch, repo, host_path)
 		    $stdout.puts Rainbow("Success: '#{repo}' cloned into '#{host_path}'").green
 		end

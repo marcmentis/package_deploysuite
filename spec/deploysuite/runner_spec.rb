@@ -84,16 +84,16 @@ module Deploysuite
 			end
 		end	
 
-		context "Outgoing message from Runner to EncProxy" do
-			before(:each) do
-				@EncProxy = double()
-				@r = Runner.new(enc_proxy: @EncProxy)
-			end	
-			it "gets encoding parameters" do
-				@EncProxy.stub(:get_enc_params)
-				@r.run_get_enc_params('file')
-			end
-		end	
+		# context "Outgoing message from Runner to EncProxy" do
+		# 	before(:each) do
+		# 		@EncProxy = double()
+		# 		@r = Runner.new(enc_proxy: @EncProxy)
+		# 	end	
+		# 	it "gets encoding parameters" do
+		# 		@EncProxy.stub(:get_enc_params)
+		# 		@r.run_get_enc_params('file')
+		# 	end
+		# end	
 		
 	end
 end

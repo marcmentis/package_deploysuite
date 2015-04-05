@@ -55,11 +55,13 @@ module Deploysuite
 		end
 
 		def get_git_branch(machine_name)
-			deploysuite_config = YAML.load(File.open('/rails/.deploysuite_config/deploysuite_config.yml'))
-			dev_machines = deploysuite_config['machine_deploy_levels']['dev']
-			qa_machines = deploysuite_config['machine_deploy_levels']['qa']
-			prod_machines = deploysuite_config['machine_deploy_levels']['prod']
-
+			ymlfiles_yml = '/rails/.deploysuite/rails_ymlfiles.yml'
+			ymlfile_paths = YAML.load(File.read(ymlfiles_yml))
+			machines_path = ymlfile_paths['paths']['machine_deploy_levels']
+			machines = YAML.load(File.read(machines_path))
+			dev_machines = machines['machine_deploy_levels']['dev']
+			qa_machines = machines['machine_deploy_levels']['qa']
+			prod_machines = machines['machine_deploy_levels']['prod']
 			if dev_machines.include?(machine_name)
 				return 'dev'
 			elsif qa_machines.include?(machine_name)
@@ -86,10 +88,13 @@ module Deploysuite
 		end
 
 		def get_machine_deployment_level(machine_name)
-			deploysuite_config = YAML.load(File.open('/rails/.deploysuite_config/deploysuite_config.yml'))
-			dev_machines = deploysuite_config['machine_deploy_levels']['dev']
-			qa_machines = deploysuite_config['machine_deploy_levels']['qa']
-			prod_machines = deploysuite_config['machine_deploy_levels']['prod']
+			ymlfiles_yml = '/rails/.deploysuite/rails_ymlfiles.yml'
+			ymlfile_paths = YAML.load(File.read(ymlfiles_yml))
+			machines_path = ymlfile_paths['paths']['machine_deploy_levels']
+			machines = YAML.load(File.read(machines_path))
+			dev_machines = machines['machine_deploy_levels']['dev']
+			qa_machines = machines['machine_deploy_levels']['qa']
+			prod_machines = machines['machine_deploy_levels']['prod']
 
 			if dev_machines.include?(machine_name)
 				return 'dev'

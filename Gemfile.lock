@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    deploysuite (0.0.18)
+    deploysuite (0.0.19)
       gli (= 2.12.2)
       rainbow
 
