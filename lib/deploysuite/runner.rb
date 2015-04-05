@@ -92,8 +92,8 @@ module Deploysuite
 			end
 		end
 
-		def run_clone_branch(repo, host_path)
-		    git_branch = v.get_git_branch(ev.machine_name)
+		def run_clone_branch(repo, host_path, ymlfiles_path)
+		    git_branch = v.get_git_branch(ev.machine_name, ymlfiles_path)
 
 		    g.clone_branch(git_branch, repo, host_path)
 		    $stdout.puts Rainbow("Success: '#{repo}' cloned into '#{host_path}'").green
@@ -170,7 +170,8 @@ module Deploysuite
 		end
 
 		def run_fetch_branch_from_origin
-			git_branch = v.get_git_branch(ev.machine_name)
+			# git_branch = v.get_git_branch(ev.machine_name)
+			git_branch = v.get_git_branch(ev.machine_name, ymlfiles_path)
 			out = g.fetch_branch_from_origin(git_branch)
 			if out[:stderr].include? "up to date"
 				DeployLog.stderr_log.fatal {"Exit Update: This branch already up-to-date"}
@@ -183,7 +184,8 @@ module Deploysuite
 		end
 
 		def run_merge_fetched_branch(message)
-			git_branch = v.get_git_branch(ev.machine_name)
+			# git_branch = v.get_git_branch(ev.machine_name)
+			git_branch = v.get_git_branch(ev.machine_name, ymlfiles_path)
 			g.merge_fetched_branch(git_branch, message)
 			$stdout.puts Rainbow("Success: merge fetched branch").green
 		end
@@ -214,9 +216,9 @@ module Deploysuite
 
 		
 
-		def run_encrypt_from_rails_db_yml(ymlfiles_yml)
-			deploy_level = v.get_machine_deployment_level(ev.machine_name)
-			encr.encrypt_from_rails_db_yml(deploy_level, ymlfiles_yml)
+		def run_encrypt_from_rails_db_yml(ymlfiles_path)
+			deploy_level = v.get_machine_deployment_level(ev.machine_name, ymlfiles_path)
+			encr.encrypt_from_rails_db_yml(deploy_level, ymlfiles_path)
 			$stdout.puts Rainbow("Success: encrypted database file created").green
 		end
 		

@@ -1,10 +1,6 @@
 #!/usr/bin/env ruby
 require 'gli'
 require 'deploysuite'
-# require 'socket'
-# require 'open3'
-# require 'logger'
-# require 'rainbow'
 
 
 
@@ -20,7 +16,7 @@ require 'deploysuite'
 include GLI::App
 include Deploysuite
 
-config_file File.join('/rails/.deploysuite','deploysuit.rc.yaml')
+config_file File.join(ENV['HOME'],'.deploysuit.yaml')
 
 
 program_desc 'Command Suite to facilitate git deployment to DEV, QA and PROD servers'
@@ -30,26 +26,27 @@ version Deploysuite::VERSION
 subcommand_option_handling :normal
 arguments :strict
 
-# desc 'Describe some switch here'
-# switch [:s,:switch]
 
 desc 'Absolute Path to App: /path/to/app (future or existing app)'
-# default_value 'the default'
-arg_name 'host_path'
-# flag [:f,:flagname]
+# default_value '/tmp/app1'
+# arg_name 'What does this mean'
 flag [:host_path]
+
+desc "Absolute Path to 'rails_ymlfiles.yml'"
+default_value '/rails/.deploysuite/rails_ymlfiles.yml'
+flag [:ymlfiles_path]
 
 
 desc 'Clone appropriate repo branch and validate user, repo, path, app'
-# arg_name 'Describe arguments to clone_new_app here'
+# arg_name 'List arguments to clone_new_app here'
 # skips_pre  # Will skip the 'pre do' block for this command
 command :clone_new_app do |c|
   c.desc 'URL to repo'
   c.default_value 'git@github.com:account/repo'
   c.flag [:repo, :r]
   c.action do |global_options,options,args|
-    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
-    switch_info = {command: "clone_new_app1", args: {host_path: global_options[:host_path], repo: options[:repo]} }
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new, ymlfiles_path: global_options[:ymlfiles_path]})
+    switch_info = {command: "clone_new_app1", args: {ymlfiles_path: global_options[:ymlfiles_path], host_path: global_options[:host_path], repo: options[:repo]} }
     s.send(switch_info)
     
 
@@ -67,11 +64,11 @@ command :clone_new_app2 do |c|
   c.switch [:rspec] # --no-rspec is false by default
   c.desc 'Run Cucumber tests'
   c.switch [:cucumber]# --no-cucumber is false by default
-  c.desc 'Path to Rails_files_config.yml'
-  c.flag [:p, :path_to_files_config]
+  # c.desc 'Path to Rails_files_config.yml'
+  # c.flag [:p, :path_to_files_config]
   c.action do |global_options,options|
-    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
-    switch_info = {command: "clone_new_app2", args: {host_path: global_options[:host_path], db: options[:db], rspec: options[:rspec], cucumber: options[:cucumber], path_to_files_config: options[:path_to_files_config]} }
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new, ymlfiles_path: global_options[:ymlfiles_path]})
+    switch_info = {command: "clone_new_app2", args: {host_path: global_options[:host_path], db: options[:db], rspec: options[:rspec], cucumber: options[:cucumber]} }
     s.send(switch_info)
 
     STDOUT.puts Rainbow("Success: 'clone_new_app2' command completed").bright.green
@@ -85,22 +82,22 @@ command :update_app do |c|
   c.flag [:m, :message]
   c.desc 'Update db tables'
   c.switch [:db]
-  c.desc 'New encrypted file (new schema added usually)'
-  c.switch [:encrypted_file]
+  # c.desc 'New encrypted file (new schema added usually)'
+  # c.switch [:encrypted_file]
   c.desc 'Run RSpec tests'
   c.switch [:rspec] # --no-rspec is false by default
   c.desc 'Run Cucumber tests'
   c.switch [:cucumber]# --no-cucumber is false by default
-  c.desc 'Path to Rails_files_config.yml'
-  c.flag [:p, :path_to_files_config]
+  # c.desc 'Path to Rails_files_config.yml'
+  # c.flag [:p, :path_to_files_config]
   c.action do |global_options,options,args|
     if options[:message] == nil
       $stdout.puts Rainbow("ERROR: Need message flag [-m, --message=arg]").red
       exit 1
     end
 
-    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
-    switch_info = {command: "update_app", args: {host_path: global_options[:host_path], message: options[:message], db: options[:db], rspec: options[:rspec], cucumber: options[:cucumber], encrypted_file: options[:encrypted_file], path_to_files_config: options[:path_to_files_config]} }
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new, ymlfiles_path: global_options[:ymlfiles_path]})
+    switch_info = {command: "update_app", args: {ymlfiles_path: global_options[:ymlfiles_path], host_path: global_options[:host_path], message: options[:message], db: options[:db], rspec: options[:rspec], cucumber: options[:cucumber]} }
     s.send(switch_info)
 
     STDOUT.puts Rainbow("Success: 'update app' command completed").bright.green
@@ -112,7 +109,7 @@ end
 desc 'Run RSpec tests on app'
 command :rspec do |c|
   c.action do |global_options|
-    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new, ymlfiles_path: global_options[:ymlfiles_path]})
     switch_info = {command: "rspec", args: {host_path: global_options[:host_path]} }
     s.send(switch_info)
 
@@ -122,7 +119,7 @@ end
 desc 'Run Cucumber tests on app'
 command :cucumber do |c|
   c.action do |global_options|
-    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new, ymlfiles_path: global_options[:ymlfiles_path]})
     switch_info = {command: "cucumber", args: {host_path: global_options[:host_path]} }
     s.send(switch_info)
     
@@ -132,7 +129,7 @@ end
 desc 'Generate SQL for whole schema'
 command :schema_SQL do |c|
   c.action do |global_options|
-    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new, ymlfiles_path: global_options[:ymlfiles_path]})
     switch_info = {command: "db_structure_dump", args: {host_path: global_options[:host_path]} }
     s.send(switch_info)
   end
@@ -144,14 +141,11 @@ desc 'Clone appropriate repo branch into valid server path'
 command :clone_branch do |c|
   c.desc 'URL to repo'
   c.default_value 'git@github.com:account/repo'
-  c.flag [:repo, :r]
+  c.flag [:r, :repo]
   c.action do |global_options,options,args|
-    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
-    switch_info = {command: "clone_branch", args: {host_path: global_options[:host_path], repo: options[:repo]} }
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new, ymlfiles_path: global_options[:ymlfiles_path]})
+    switch_info = {command: "clone_branch", args: {ymlfiles_path: global_options[:ymlfiles_path], host_path: global_options[:host_path], repo: options[:repo]} }
     s.send(switch_info)
-
-    
-    
 
     # STDOUT.puts "Success: 'Clone_branch' command completed"
     # DeployLog.stdout_log.info {"Success: 'Clone_branch' command completed"}
@@ -163,7 +157,7 @@ end
 desc 'Run bundle command for application production environment only'
 command :bundle do |c|
   c.action do |global_options|
-    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new, ymlfiles_path: global_options[:ymlfiles_path]})
     switch_info = {command: "bundle", args: {host_path: global_options[:host_path]} }
     s.send(switch_info)
   end
@@ -173,15 +167,9 @@ end
 desc 'Encrypt deploy-level specific data from rails_db.yml'
 skips_pre
 command :encrypt_db do |c|
-  c.desc 'Path to rails_ymlfiles.yml'
-  c.flag [:y, :ymlfiles]
   c.action do |global_options,options,args|
-    if options[:y] == nil
-      $stdout.puts Rainbow("ERROR: Need path to yml files flag [:y, :ymlfiles]").red
-      exit 1
-    end
-    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new})
-    switch_info = {command: "encrypt_db", args: {ymlfiles_yml: options[:ymlfiles]} }
+    s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new, ymlfiles_path: global_options[:ymlfiles_path]})
+    switch_info = {command: "encrypt_db", args: {ymlfiles_path: global_options[:ymlfiles_path]} }
     s.send(switch_info)
 
   end

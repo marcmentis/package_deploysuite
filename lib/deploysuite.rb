@@ -14,6 +14,7 @@ require 'deploysuite/repo_branch_switcher'
 
 require 'deploysuite/version.rb'
 require 'deploysuite/runner.rb'
+require 'deploysuite/config_values'
 require 'deploysuite/env_values.rb'
 require 'deploysuite/deploy_log.rb'
 require 'deploysuite/validator.rb'

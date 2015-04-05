@@ -1,16 +1,17 @@
 module Deploysuite
 	class RepoBranchSwitcher
-		attr_reader :v, :ev, :git_branch
+		attr_reader :v, :ev, :git_branch, :ymlfiles_path
 
 		def initialize(args={})
 			@v = args[:validator]
 			@ev = args[:env_values]
+			@ymlfiles_path = args[:ymlfiles_path]
 			@git_branch = get_git_branch
 		end
 		
 
 		def get_git_branch
-			git_branch = v.get_git_branch(ev.machine_name)
+			git_branch = v.get_git_branch(ev.machine_name, ymlfiles_path)
 		end
 
 		def send(switch_info={})

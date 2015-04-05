@@ -1,16 +1,15 @@
 module Deploysuite
 	class Encryptor
+		include ConfigValues
 
-		def encrypt_from_rails_db_yml(deploy_level, ymlfiles_yml)
+		def encrypt_from_rails_db_yml(deploy_level, ymlfiles_path)
 
-			# Get paths to relevant encryption config files
-			ymlfile_paths = YAML.load(File.read(ymlfiles_yml))
-			cipher_yml = ymlfile_paths['paths']['cipher_yml']
-			db_yml = ymlfile_paths['paths']['db_yml']
-			temp_db_yml = ymlfile_paths['paths']['temp_db_yml']
-			encrypted_db_yml = ymlfile_paths['paths']['encrypted_db_yml']
-			decryption_test_yml = ymlfile_paths['paths']['decryption_test_yml']
-
+			ymlfile_paths = get_paths_from_rails_ymlfiles_yml(ymlfiles_path)
+			cipher_yml = ymlfile_paths[:cipher_yml]
+			db_yml = ymlfile_paths[:db_yml]
+			temp_db_yml = ymlfile_paths[:temp_db_yml]
+			encrypted_db_yml = ymlfile_paths[:encrypted_db_yml]
+			decryption_test_yml = ymlfile_paths[:decryption_test_yml]
 
 			# Get Common and Appropriate data for deploy_level from database_source.yml
 			db_values = YAML.load(File.read(db_yml))
@@ -78,9 +77,9 @@ module Deploysuite
 
 		def get_cipher_params(cipher_yml)
 			cipher_params = YAML.load(File.read(cipher_yml))
-			key = cipher_params['key']
-			iv = cipher_params['iv']
-			alg =cipher_params['alg']
+			key = cipher_params[:key]
+			iv = cipher_params[:iv]
+			alg =cipher_params[:alg]
 				# puts "key: #{key}"
 				# puts "iv: #{iv}"
 				# puts "alg: #{alg}"

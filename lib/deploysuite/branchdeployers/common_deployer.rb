@@ -7,7 +7,7 @@ module CommonDeployer
 
 	def encrypt_db(args={})
 		r.run_in_group?('railsenc')
-		r.run_encrypt_from_rails_db_yml(args[:ymlfiles_yml])
+		r.run_encrypt_from_rails_db_yml(args[:ymlfiles_path])
 	end
 
 	def clone_new_app1(args={})
@@ -16,7 +16,7 @@ module CommonDeployer
 		r.run_app_not_exist?(args[:host_path])
 		r.run_repo_exists?(args[:repo])
 		# r.run_secret_config1?(args[:host_path])
-		r.run_clone_branch(args[:repo], args[:host_path])
+		r.run_clone_branch(args[:repo], args[:host_path], args[:ymlfiles_path])
 		# r.run_move_secret_file(args[:host_path])
 		r.run_set_app_privileges_ownership(args[:host_path])
 	end
@@ -73,7 +73,8 @@ module CommonDeployer
 	end
 
 	def clone_branch(args={})
-		r.run_clone_branch(args[:repo], args[:host_path])
+		# r.run_clone_branch(args[:repo], args[:host_path])
+		r.run_clone_branch(args[:repo], args[:host_path], args[:ymlfiles_path])
 	end
 
 	def db_structure_dump(args={})
