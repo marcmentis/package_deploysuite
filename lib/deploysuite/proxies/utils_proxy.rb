@@ -1,6 +1,7 @@
 module Deploysuite
 	class UtilsProxy
 		include CommandlineExecuter
+		include ConfigValues
 
 		def check_pwd(host_path)
 			pwd = `pwd`.chomp
@@ -74,12 +75,12 @@ module Deploysuite
 			end
 		end
 
-		def copy_sqlrake_file(host_path, rails_files_config)
+		def copy_sqlrake_file(host_path, ymlfiles_path)
 			# Get paths to relevant db management files
-			files_config = YAML.load(File.read(rails_files_config))
-			file = files_config['paths']['sql_rake']
+			ymlfiles = YAML.load(File.read(ymlfiles_path))
+			sql_rake = ymlfiles[:paths][:sql_rake]
 			final_path = "#{host_path}/lib/tasks/sql.rake"
-			cmd = "cp #{file} #{final_path}"
+			cmd = "cp #{sql_rake} #{final_path}"
 			open3method(cmd)
 		end
 

@@ -204,8 +204,8 @@ module Deploysuite
 			u.restore_old_schema
 		end
 
-		def run_copy_sqlrake_file(host_path, rails_files_config)
-			u.copy_sqlrake_file(host_path, rails_files_config)
+		def run_copy_sqlrake_file(host_path, ymlfiles_path)
+			u.copy_sqlrake_file(host_path, ymlfiles_path)
 			$stdout.puts Rainbow("Success: sql.rake copied to app: #{host_path}").green
 		end
 
