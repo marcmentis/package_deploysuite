@@ -39,12 +39,12 @@ module CommonDeployer
 
 	def update_app(args={})	
 		r.run_check_pwd(args[:host_path])
-		r.run_fetch_branch_from_origin
+		r.run_fetch_branch_from_origin(args[:ymlfiles_path])
 		# r.run_secret_config1?(args[:host_path]) if args[:encrypted_file]
 		# r.run_move_secret_file(args[:host_path]) if args[:encrypted_file]
 	    r.run_clobber_assets
 	    r.run_stash_local_changes	    
-	    r.run_merge_fetched_branch(args[:message])
+	    r.run_merge_fetched_branch(args[:message], (args[:ymlfiles_path]))
 	    r.run_bundle
 	    # r.run_create_deploy_level_db_params(args[:path_to_files_config])
 	    r.run_precompile_assets

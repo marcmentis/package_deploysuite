@@ -169,7 +169,7 @@ module Deploysuite
 			$stdout.puts Rainbow("Success: Local changes stashed").green
 		end
 
-		def run_fetch_branch_from_origin
+		def run_fetch_branch_from_origin(ymlfiles_path)
 			# git_branch = v.get_git_branch(ev.machine_name)
 			git_branch = v.get_git_branch(ev.machine_name, ymlfiles_path)
 			out = g.fetch_branch_from_origin(git_branch)
@@ -183,7 +183,7 @@ module Deploysuite
 			
 		end
 
-		def run_merge_fetched_branch(message)
+		def run_merge_fetched_branch(message, ymlfiles_path)
 			# git_branch = v.get_git_branch(ev.machine_name)
 			git_branch = v.get_git_branch(ev.machine_name, ymlfiles_path)
 			g.merge_fetched_branch(git_branch, message)

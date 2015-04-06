@@ -68,8 +68,11 @@ module Deploysuite
 
 			it "clone the appropriate branch" do
 				@GitProxy.stub(:clone_branch)
-				r = Runner.new(git_proxy: @GitProxy, validator: Validator.new, env_values: EnvValues.new)
-				r.run_clone_branch('stub-repo', 'stub-host_path')
+				v = double()
+				v.stub(:get_git_branch)
+				
+				r = Runner.new(git_proxy: @GitProxy, validator: v, env_values: EnvValues.new)
+				r.run_clone_branch('stub-repo', 'stub-host_path', 'stub-ymlfiles_path')
 			end
 		end
 
