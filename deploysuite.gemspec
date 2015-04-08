@@ -25,6 +25,4 @@ spec = Gem::Specification.new do |s|
   s.add_runtime_dependency('gli','2.12.2')
   s.add_runtime_dependency('rainbow')
 
-  # ? need to add rspec to development_dependency 
-    # rspec-mocks -v 2.13.1, rspec-support -v 3.2.1, rspec-core -v 2.13.1
 end
