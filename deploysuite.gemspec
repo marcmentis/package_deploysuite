@@ -24,5 +24,7 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('rspec-core', '2.13.1')
   s.add_runtime_dependency('gli','2.12.2')
   s.add_runtime_dependency('rainbow')
+  s.add_runtime_dependency('gem-man', '0.3.0')
+  s.add_runtime_dependency('ronn', '0.7.3')
 
 end
