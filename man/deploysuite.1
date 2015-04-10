@@ -7,38 +7,55 @@
 \fBdeploysuite\fR
 .
 .SH "SYNOPSIS"
-\fBdeploysuite\fR \fB\-\-host_path\fR \fBymlfiles_path\fR \fIclone_new_app\fR \fBr\fR|\fB\-\-repo\fR
-.
-.br
-\fBdeploysuite\fR \fB\-\-host_path\fR \fBymlfiles_path\fR \fIclone_new_app2\fR \fB\-\-[no\-]db\fR \fB\-\-[no\-]rspec\fR \fB\-\-[no\-]cucumber\fR
-.
-.br
-\fBdeploysuite\fR \fB\-\-host_path\fR \fBymlfiles_path\fR \fIupdate_app\fR \fB\-m\fR|\fB\-\-message\fR \fB\-\-[no\-]db\fR \fB\-\-[no\-]rspec\fR \fB\-\-[no\-]cucumber\fR
-.
-.br
-.
-.P
-\fIdeploysuite\fR [\-\-version] [\-\-help] [\-\-host_path=path] [\-\-ymlfiles_path=path] \fBcommand\fR [args]
+\fBdeploysuite\fR [\-\-version] [\-\-help] [\-\-host_path=path] [\-\-ymlfiles_path=path] \fBcommand\fR [options\.\.\.]
 .
 .SH "DESCRIPTION"
-\fBdb_backup\.rb\fR is a simple command\-line tool for backing up a MySQL database\. It does so safely and quietly, using a sensible name for the backup files, so it\'s perfect for use with cron as a daily backup\. By default, \fBdb_backup\.rb\fR makes a daily backup and names the resulting backup file with the date\. \fBdb_backup\.rb\fR also understands our development process, so if you specify the \fB\-\-iteration\fR flag, the backup will be named differently than for a daily backup\. This will allow you to easily keep one backup per iteration, easily identifying it, and differentiate it from daily backups\. By default, \fBdb_backup\.rb\fR will use your database credentials in \fB~/\.my\.cnf\fR, however, you can override either the username or password (or both) via the \fB\-u\fR and \fB\-p\fR flags, respectively\. Finally, \fBdb_backup\.rb\fR will add a sanity check on your username, to make sure it fits with our corporate standard format of \fBfirst\.last\fR\.
+\fBdeploysuite\fR is a command\-suite app to simplify (i) the deployment process from a canonical code source (i\.e\. GitHub/GitLab) to dev, qa, and prod servers and (ii) creating an encrypted file containing sensitive database information that is accessed by applications\.
 .
 .SH "FILES"
-\fB~/\.my\.cnf\fR is used for authentication if \fB\-u\fR or \fB\-p\fR is omitted\.
+\fB/rails/\.deploysuite/rails_ymlfiles\.yml\fR is used for master config\.yml file if \fB\-y|\-\-ymlfiles_path\fR is omitted\.
 .
 .SH "OPTIONS"
 .
 .TP
-\fB\-i\fR, \fB\-\-iteration\fR
-Indicate that this backup is an "end of iteration" backup\.
+\-h, \-\-help
+When used directly after \fBdeploysuite\fR prints \fIsynopsis\fR \fIversion\fR \fIglobal_options\fR and \fIcommands\fR with a short description of function
+.
+.br
+When used directly after a \fBcommand\fR prints, relative for that command, a brief description of command function, command usage, and a list of command options with brief description of each option\'s function
 .
 .TP
-\fB\-u USER\fR
-Database username, in first\.last format \fB~/my\.cnf\fR is not correct
+\-v, \-\-version
+lists the application version
 .
 .TP
-\fB\-p PASSWORD\fR
-Database password
+\-\-host_path
+Provide the \fBabsolute path\fR to the application\. Either the future path (cloning a new application) or the existing path (updating an application)
+.
+.TP
+\-y, \-\-ymlfiles_path
+Provide the \fBabsolute path\fR to the master yaml configuration file\. Default path is /rails/\.deploysuite/rails_ymlfiles\.yml
 .
 .SH "EXAMPLES"
-Backup the database "big_client" $ db_backup\.rb big_client Including a Man Page • 45 ￼Prepared exclusively for Marc Mentis report erratum • discuss Backup the database "small_client", for which different credentials are required: $ db_backup\.rb \-u dave \-p d4v3 small_client Make an iteration backup of the "big_client" database: $ db_backup\.rb \-i big_client
+\fBdeploysuite\fR \-\-host_path ymlfiles_path \fBclone_new_app\fR r|\-\-repo
+.
+.br
+\fBdeploysuite\fR \-\-host_path ymlfiles_path \fBclone_new_app2\fR \-\-[no\-]db \-\-[no\-]rspec \-\-[no\-]cucumber
+.
+.br
+\fBdeploysuite\fR \-\-host_path ymlfiles_path \fBupdate_app\fR \-m|\-\-message \-\-[no\-]db \-\-[no\-]rspec \-\-[no\-]cucumber
+.
+.br
+.
+.SH "ENVIRONMENT"
+.
+.SH "BUGS"
+.
+.SH "LICENSE"
+.
+.SH "AUTHOR"
+.
+.SH "COPYRIGHT"
+.
+.SH "SEE ALSO"
+

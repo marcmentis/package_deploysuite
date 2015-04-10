@@ -59,6 +59,12 @@
     <a href="#FILES">FILES</a>
     <a href="#OPTIONS">OPTIONS</a>
     <a href="#EXAMPLES">EXAMPLES</a>
+    <a href="#ENVIRONMENT">ENVIRONMENT</a>
+    <a href="#BUGS">BUGS</a>
+    <a href="#LICENSE">LICENSE</a>
+    <a href="#AUTHOR">AUTHOR</a>
+    <a href="#COPYRIGHT">COPYRIGHT</a>
+    <a href="#SEE-ALSO">SEE ALSO</a>
   </div>
 
   <ol class='man-decor man-head man head'>
@@ -73,56 +79,44 @@
 </p>
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>deploysuite</code> <code>--host_path</code> <code>ymlfiles_path</code> <var>clone_new_app</var> <code>r</code>|<code>--repo</code><br />
-<code>deploysuite</code> <code>--host_path</code> <code>ymlfiles_path</code> <var>clone_new_app2</var> <code>--[no-]db</code> <code>--[no-]rspec</code> <code>--[no-]cucumber</code><br />
-<code>deploysuite</code> <code>--host_path</code> <code>ymlfiles_path</code> <var>update_app</var> <code>-m</code>|<code>--message</code> <code>--[no-]db</code> <code>--[no-]rspec</code> <code>--[no-]cucumber</code><br /></p>
-
-<p><var>deploysuite</var> [--version] [--help] [--host_path=path] [--ymlfiles_path=path] <code>command</code> [args]</p>
+<p><code>deploysuite</code> [--version] [--help] [--host_path=path] [--ymlfiles_path=path] <code>command</code> [options...]</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p><strong>db_backup.rb</strong> is a simple command-line tool for backing up a
-MySQL database.  It does so safely and quietly, using a sensible
-name for the backup files, so it's perfect for use with cron as
-a daily backup.
-By default, <code>db_backup.rb</code> makes a daily backup and names the
-resulting backup file with the date.  <code>db_backup.rb</code> also
-understands our development process, so if you specify the
-<code>--iteration</code> flag, the backup will be named differently than
-for a daily backup.  This will allow you to easily keep one
-backup per iteration, easily identifying it, and differentiate
-it from daily backups.
-By default, <code>db_backup.rb</code> will use your database credentials
-in <code>~/.my.cnf</code>, however, you can override either the username
-or password (or both) via the <code>-u</code> and <code>-p</code> flags, respectively.
-Finally, <code>db_backup.rb</code> will add a sanity check on your username, to
-make sure it fits with our corporate standard format of <code>first.last</code>.</p>
+<p><strong>deploysuite</strong> is a command-suite app to simplify (i) the deployment process from a canonical code source (i.e. GitHub/GitLab) to dev, qa, and prod servers and (ii) creating an encrypted file containing sensitive database information that is accessed by applications.</p>
 
 <h2 id="FILES">FILES</h2>
 
-<p><code>~/.my.cnf</code> is used for authentication if <code>-u</code> or <code>-p</code> is omitted.</p>
+<p><code>/rails/.deploysuite/rails_ymlfiles.yml</code> is used for master config.yml file if <code>-y|--ymlfiles_path</code> is omitted.</p>
 
 <h2 id="OPTIONS">OPTIONS</h2>
 
 <dl>
-<dt><code>-i</code>, <code>--iteration</code></dt><dd>Indicate that this backup is an "end of iteration" backup.</dd>
-<dt class="flush"><code>-u USER</code></dt><dd>Database username, in first.last format
-<code>~/my.cnf</code> is not correct</dd>
-<dt><code>-p PASSWORD</code></dt><dd>Database password</dd>
+<dt>-h, --help</dt><dd>When used directly after <code>deploysuite</code> prints <var>synopsis</var> <var>version</var> <var>global_options</var> and <var>commands</var> with a short description of function<br />
+When used directly after a <code>command</code> prints, relative for that command, a brief description of command function, command usage, and a list of command options with brief description of each option's function</dd>
+<dt>-v, --version</dt><dd>lists the application version</dd>
+<dt>--host_path</dt><dd>Provide the <code>absolute path</code> to the application. Either the future path (cloning a new application) or the existing path (updating an application)</dd>
+<dt>-y, --ymlfiles_path</dt><dd>Provide the <code>absolute path</code> to the master yaml configuration file. Default path is /rails/.deploysuite/rails_ymlfiles.yml</dd>
 </dl>
 
 
 <h2 id="EXAMPLES">EXAMPLES</h2>
 
-<p>Backup the database "big_client"
-    $ db_backup.rb big_client
-Including a Man Page • 45
-￼Prepared exclusively for Marc Mentis
-report erratum • discuss
-Backup the database "small_client", for which different credentials are required:
-    $ db_backup.rb -u dave -p d4v3 small_client
-Make an iteration backup of the "big_client" database:
-    $ db_backup.rb -i big_client</p>
+<p><code>deploysuite</code> --host_path ymlfiles_path <code>clone_new_app</code> r|--repo<br />
+<code>deploysuite</code> --host_path ymlfiles_path <code>clone_new_app2</code> --[no-]db --[no-]rspec --[no-]cucumber<br />
+<code>deploysuite</code> --host_path ymlfiles_path <code>update_app</code> -m|--message --[no-]db --[no-]rspec --[no-]cucumber<br /></p>
+
+<h2 id="ENVIRONMENT">ENVIRONMENT</h2>
+
+<h2 id="BUGS">BUGS</h2>
+
+<h2 id="LICENSE">LICENSE</h2>
+
+<h2 id="AUTHOR">AUTHOR</h2>
+
+<h2 id="COPYRIGHT">COPYRIGHT</h2>
+
+<h2 id="SEE-ALSO">SEE ALSO</h2>
 
 
   <ol class='man-decor man-foot man foot'>

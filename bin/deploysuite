@@ -34,7 +34,7 @@ flag [:host_path]
 
 desc "Absolute Path to 'rails_ymlfiles.yml'"
 default_value '/rails/.deploysuite/rails_ymlfiles.yml'
-flag [:ymlfiles_path]
+flag [:ymlfiles_path, :y]
 
 
 desc 'Clone appropriate repo branch and validate user, repo, path, app'
