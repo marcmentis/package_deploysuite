@@ -7,10 +7,16 @@
 \fBdeploysuite\fR
 .
 .SH "SYNOPSIS"
-\fBdeploysuite\fR [\-\-version] [\-\-help] [\-\-host_path=path] [\-\-ymlfiles_path=path] \fBcommand\fR [options\.\.\.]
+\fBdeploysuite\fR [\-\-version] [\-\-help] [\-\-host_path=path] [\-\-ymlfiles_path=path] \fBcommand\fR [command options\.\.\.]
 .
 .SH "DESCRIPTION"
-\fBdeploysuite\fR is a command\-suite app to simplify (i) the deployment process from a canonical code source (i\.e\. GitHub/GitLab) to dev, qa, and prod servers and (ii) creating an encrypted file containing sensitive database information that is accessed by applications\.
+\fBdeploysuite\fR is a command\-suite app to simplify
+.
+.br
+(i) \fBdeploying\fR code to dev, qa, and prod servers from a canonical source (i\.e\. GitHub/GitLab)
+.
+.br
+(ii) \fBcreating\fR an encrypted file containing sensitive information accessed by applications\.
 .
 .SH "FILES"
 \fB/rails/\.deploysuite/rails_ymlfiles\.yml\fR is used for master config\.yml file if \fB\-y|\-\-ymlfiles_path\fR is omitted\.
@@ -22,7 +28,7 @@
 When used directly after \fBdeploysuite\fR prints \fIsynopsis\fR \fIversion\fR \fIglobal_options\fR and \fIcommands\fR with a short description of function
 .
 .br
-When used directly after a \fBcommand\fR prints, relative for that command, a brief description of command function, command usage, and a list of command options with brief description of each option\'s function
+When used directly after a \fBcommand\fR prints, relative for that command, a brief description of command function, synpsis of command usage, and a list of command options with brief description of each option\'s function
 .
 .TP
 \-v, \-\-version
@@ -30,22 +36,43 @@ lists the application version
 .
 .TP
 \-\-host_path
-Provide the \fBabsolute path\fR to the application\. Either the future path (cloning a new application) or the existing path (updating an application)
+Provide the \fBabsolute path\fR to the application\. Either the future path (when cloning a new application) or the existing path (when updating an application)
 .
 .TP
 \-y, \-\-ymlfiles_path
 Provide the \fBabsolute path\fR to the master yaml configuration file\. Default path is /rails/\.deploysuite/rails_ymlfiles\.yml
 .
+.TP
+\-r, \-\-repo
+Provide the URL to the repository containing the source code\.
+.
+.TP
+\-\-[no\-]db
+Switch to execute outstanding database migrations\. May be needed when cloning a new application, or updating an existing application\. If omitted, default is not to look for any outstanding database migrations\. When deploying to a DEV server, will make changes to database tables\. When deploying to QA or PROD servers, will not change database tables but will create a script containing the necessary SQL code for the database changes\. The SQL code will need to be run by hand\.
+.
+.TP
+\-m, \-\-message
+Provide brief (< 60 char) message describing changes made when updating an existing application\. Use imperitive present tense, i\.e\., "Add tests for x"
+.
+.TP
+\-\-[no]\-rspec
+Run rspec tests for application
+.
+.TP
+\-\-[no]\-cucumber
+Run cucumber tests for application
+.
 .SH "EXAMPLES"
-\fBdeploysuite\fR \-\-host_path ymlfiles_path \fBclone_new_app\fR r|\-\-repo
+\fBdeploysuite\fR \-\-host_path \-\-ymlfiles_path \fBclone_new_app\fR \-r|\-\-repo
 .
 .br
-\fBdeploysuite\fR \-\-host_path ymlfiles_path \fBclone_new_app2\fR \-\-[no\-]db \-\-[no\-]rspec \-\-[no\-]cucumber
+\fBdeploysuite\fR \-\-host_path \-\-ymlfiles_path \fBclone_new_app2\fR \-\-[no\-]db \-\-[no\-]rspec \-\-[no\-]cucumber
 .
 .br
-\fBdeploysuite\fR \-\-host_path ymlfiles_path \fBupdate_app\fR \-m|\-\-message \-\-[no\-]db \-\-[no\-]rspec \-\-[no\-]cucumber
+\fBdeploysuite\fR \-\-host_path \-\-ymlfiles_path \fBupdate_app\fR \-m|\-\-message \-\-[no\-]db \-\-[no\-]rspec \-\-[no\-]cucumber
 .
 .br
+\fBdeploysuite\fR \-\-ymlfiles_path \fBencrypt_db\fR
 .
 .SH "ENVIRONMENT"
 .

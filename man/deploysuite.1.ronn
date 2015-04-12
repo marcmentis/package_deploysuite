@@ -1,10 +1,12 @@
 ## SYNOPSIS
 
-`deploysuite` [--version] [--help] [--host_path=path] [--ymlfiles_path=path] `command` [options...]
+`deploysuite` [--version] [--help] [--host_path=path] [--ymlfiles_path=path] `command` [command options...]
 
 
 ## DESCRIPTION
-**deploysuite** is a command-suite app to simplify (i) the deployment process from a canonical code source (i.e. GitHub/GitLab) to dev, qa, and prod servers and (ii) creating an encrypted file containing sensitive database information that is accessed by applications.
+**deploysuite** is a command-suite app to simplify<br> 
+(i) **deploying** code to dev, qa, and prod servers from a canonical source (i.e. GitHub/GitLab)<br> 
+(ii) **creating** an encrypted file containing sensitive information accessed by applications.
 
 
 
@@ -14,18 +16,30 @@
 ## OPTIONS
   * -h, --help:
     When used directly after `deploysuite` prints <synopsis> <version> <global_options> and <commands> with a short description of function<br>
-    When used directly after a `command` prints, relative for that command, a brief description of command function, command usage, and a list of command options with brief description of each option's function
+    When used directly after a `command` prints, relative for that command, a brief description of command function, synpsis of command usage, and a list of command options with brief description of each option's function
   * -v, --version:
     lists the application version
   * --host_path:
     Provide the `absolute path` to the application. Either the future path (when cloning a new application) or the existing path (when updating an application)
   * -y, --ymlfiles_path:
     Provide the `absolute path` to the master yaml configuration file. Default path is /rails/.deploysuite/rails_ymlfiles.yml
+  * -r, --repo:
+    Provide the URL to the repository containing the source code.
+  * --[no-]db:
+    Switch to execute outstanding database migrations. May be needed when cloning a new application, or updating an existing application. If omitted, default is not to look for any outstanding database migrations. When deploying to a DEV server, will make changes to database tables. When deploying to QA or PROD servers, will not change database tables but will create a script containing the necessary SQL code for the database changes. The SQL code will need to be run by hand.
+  * -m, --message:
+    Provide brief (< 60 char) message describing changes made when updating an existing application. Use imperitive present tense, i.e., "Add tests for x" 
+  * --[no]-rspec:
+    Run rspec tests for application
+  * --[no]-cucumber:
+    Run cucumber tests for application 
+
     
 ## EXAMPLES
-`deploysuite` --host_path ymlfiles_path `clone_new_app` r|--repo<br>
-`deploysuite` --host_path ymlfiles_path `clone_new_app2` --[no-]db --[no-]rspec --[no-]cucumber<br>
-`deploysuite` --host_path ymlfiles_path `update_app` -m|--message --[no-]db --[no-]rspec --[no-]cucumber<br>
+`deploysuite` --host_path --ymlfiles_path `clone_new_app` -r|--repo<br>
+`deploysuite` --host_path --ymlfiles_path `clone_new_app2` --[no-]db --[no-]rspec --[no-]cucumber<br>
+`deploysuite` --host_path --ymlfiles_path `update_app` -m|--message --[no-]db --[no-]rspec --[no-]cucumber<br>
+`deploysuite` --ymlfiles_path `encrypt_db`
 
 ## ENVIRONMENT
 

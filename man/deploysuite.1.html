@@ -79,11 +79,13 @@
 </p>
 <h2 id="SYNOPSIS">SYNOPSIS</h2>
 
-<p><code>deploysuite</code> [--version] [--help] [--host_path=path] [--ymlfiles_path=path] <code>command</code> [options...]</p>
+<p><code>deploysuite</code> [--version] [--help] [--host_path=path] [--ymlfiles_path=path] <code>command</code> [command options...]</p>
 
 <h2 id="DESCRIPTION">DESCRIPTION</h2>
 
-<p><strong>deploysuite</strong> is a command-suite app to simplify (i) the deployment process from a canonical code source (i.e. GitHub/GitLab) to dev, qa, and prod servers and (ii) creating an encrypted file containing sensitive database information that is accessed by applications.</p>
+<p><strong>deploysuite</strong> is a command-suite app to simplify<br />
+(i) <strong>deploying</strong> code to dev, qa, and prod servers from a canonical source (i.e. GitHub/GitLab)<br />
+(ii) <strong>creating</strong> an encrypted file containing sensitive information accessed by applications.</p>
 
 <h2 id="FILES">FILES</h2>
 
@@ -93,18 +95,24 @@
 
 <dl>
 <dt>-h, --help</dt><dd>When used directly after <code>deploysuite</code> prints <var>synopsis</var> <var>version</var> <var>global_options</var> and <var>commands</var> with a short description of function<br />
-When used directly after a <code>command</code> prints, relative for that command, a brief description of command function, command usage, and a list of command options with brief description of each option's function</dd>
+When used directly after a <code>command</code> prints, relative for that command, a brief description of command function, synpsis of command usage, and a list of command options with brief description of each option's function</dd>
 <dt>-v, --version</dt><dd>lists the application version</dd>
-<dt>--host_path</dt><dd>Provide the <code>absolute path</code> to the application. Either the future path (cloning a new application) or the existing path (updating an application)</dd>
+<dt>--host_path</dt><dd>Provide the <code>absolute path</code> to the application. Either the future path (when cloning a new application) or the existing path (when updating an application)</dd>
 <dt>-y, --ymlfiles_path</dt><dd>Provide the <code>absolute path</code> to the master yaml configuration file. Default path is /rails/.deploysuite/rails_ymlfiles.yml</dd>
+<dt>-r, --repo</dt><dd>Provide the URL to the repository containing the source code.</dd>
+<dt>--[no-]db</dt><dd>Switch to execute outstanding database migrations. May be needed when cloning a new application, or updating an existing application. If omitted, default is not to look for any outstanding database migrations. When deploying to a DEV server, will make changes to database tables. When deploying to QA or PROD servers, will not change database tables but will create a script containing the necessary SQL code for the database changes. The SQL code will need to be run by hand.</dd>
+<dt>-m, --message</dt><dd>Provide brief (&lt; 60 char) message describing changes made when updating an existing application. Use imperitive present tense, i.e., "Add tests for x"</dd>
+<dt>--[no]-rspec</dt><dd>Run rspec tests for application</dd>
+<dt>--[no]-cucumber</dt><dd>Run cucumber tests for application</dd>
 </dl>
 
 
 <h2 id="EXAMPLES">EXAMPLES</h2>
 
-<p><code>deploysuite</code> --host_path ymlfiles_path <code>clone_new_app</code> r|--repo<br />
-<code>deploysuite</code> --host_path ymlfiles_path <code>clone_new_app2</code> --[no-]db --[no-]rspec --[no-]cucumber<br />
-<code>deploysuite</code> --host_path ymlfiles_path <code>update_app</code> -m|--message --[no-]db --[no-]rspec --[no-]cucumber<br /></p>
+<p><code>deploysuite</code> --host_path --ymlfiles_path <code>clone_new_app</code> -r|--repo<br />
+<code>deploysuite</code> --host_path --ymlfiles_path <code>clone_new_app2</code> --[no-]db --[no-]rspec --[no-]cucumber<br />
+<code>deploysuite</code> --host_path --ymlfiles_path <code>update_app</code> -m|--message --[no-]db --[no-]rspec --[no-]cucumber<br />
+<code>deploysuite</code> --ymlfiles_path <code>encrypt_db</code></p>
 
 <h2 id="ENVIRONMENT">ENVIRONMENT</h2>
 
