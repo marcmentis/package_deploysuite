@@ -91,7 +91,7 @@ module Deploysuite
 		end
 
 		def change_gemfile_source(host_path)
-			gemfile = host_path+'/Gemfile'
+			gemfile = "#{host_path}/Gemfile"
 
 			text = File.read(gemfile)
 			new_contents = text.sub!("source 'https://rubygems.org'", "source 'http://rubygems.org'")

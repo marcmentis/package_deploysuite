@@ -23,14 +23,14 @@ module CommonDeployer
 
 	def clone_new_app2(args={})
 		r.run_check_pwd(args[:host_path])
-		r.run_change_gemfile_source(:host_path)
+		r.run_change_gemfile_source(args[:host_path])
 	    r.run_bundle
-	    # r.run_create_deploy_level_db_params(args[:path_to_files_config])
+	      # r.run_create_deploy_level_db_params(args[:path_to_files_config])
 	    r.run_precompile_assets
 	    # HOOK for db functions
 	    	clone_app_db_functions(args) if args[:db]	    
 	    r.run_start_application
-	    # r.run_destroy_deploy_level_db_params(args[:path_to_files_config])
+	      # r.run_destroy_deploy_level_db_params(args[:path_to_files_config])
 	    r.run_first_commit
 	    r.run_set_app_privileges_ownership(args[:host_path])
 	    r.run_rspec_tests if args[:rspec]
