@@ -221,6 +221,11 @@ module Deploysuite
 			encr.encrypt_from_rails_db_yml(deploy_level, ymlfiles_path)
 			$stdout.puts Rainbow("Success: encrypted database file created").green
 		end
+
+		def run_change_gemfile_source(host_path)
+			u.change_gemfile_source(host_path)
+			$stdout.puts Rainbow("Success: Gemfile source changed").green
+		end
 		
 			
 	end

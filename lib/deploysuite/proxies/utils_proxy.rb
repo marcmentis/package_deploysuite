@@ -89,5 +89,17 @@ module Deploysuite
 			cmd = "rm #{final_path}"
 			open3method(cmd)
 		end
+
+		def change_gemfile_source(host_path)
+			gemfile = host_path+'/Gemfile'
+
+			text = File.read(gemfile)
+			new_contents = text.sub!("source 'https://rubygems.org'", "source 'http://rubygems.org'")
+
+			File.open(gemfile, "w") do |f| 
+				f.puts new_contents
+			end
+			
+		end
 	end
 end

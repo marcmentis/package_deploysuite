@@ -85,6 +85,10 @@ module Deploysuite
 				@UtilsProxy.stub(:start_application)
 				@r.run_start_application()
 			end
+			it "change gemfile source" do
+				@UtilsProxy.stub(:change_gemfile_source)
+				@r.run_change_gemfile_source('stub-host_path')
+			end
 		end	
 
 		# context "Outgoing message from Runner to EncProxy" do

@@ -23,6 +23,7 @@ module CommonDeployer
 
 	def clone_new_app2(args={})
 		r.run_check_pwd(args[:host_path])
+		r.run_change_gemfile_source(:host_path)
 	    r.run_bundle
 	    # r.run_create_deploy_level_db_params(args[:path_to_files_config])
 	    r.run_precompile_assets
