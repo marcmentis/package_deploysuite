@@ -102,8 +102,9 @@ module Deploysuite
 		end
 
 		def create_sticky_gemset(ruby_version, host_name)
-			cmd = "rvm use ruby-#{ruby_version}@#{host_name} --ruby-version --create"
-			open3method(cmd, 'out')		
+			# cmd = "rvm use ruby-#{ruby_version}@#{host_name} --ruby-version --create"
+			# open3method(cmd, 'out')	
+			`rvm use ruby-#{ruby_version}@#{host_name} --ruby-version --create`	
 		end
 	end
 end
