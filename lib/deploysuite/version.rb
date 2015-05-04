@@ -1,3 +1,3 @@
 module Deploysuite
-  VERSION = '0.0.28alpha'
+  VERSION = '0.0.29'
 end
