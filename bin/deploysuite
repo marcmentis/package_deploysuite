@@ -58,6 +58,8 @@ end
 
 desc 'Complete the setup of newly cloned repo branch from within root dir'
 command :clone_new_app2 do |c|
+  c.desc 'Ruby version number to use in rvm host gemset'
+  c.flag [:ruby_version, :r]
   c.desc 'Create DB or SQL code as appropriate'
   c.switch [:db]  # --no-db is false by default
   c.desc 'Run RSpec tests'
@@ -68,7 +70,7 @@ command :clone_new_app2 do |c|
   # c.flag [:p, :path_to_files_config]
   c.action do |global_options,options|
     s = RepoBranchSwitcher.new({validator: Validator.new, env_values: EnvValues.new, ymlfiles_path: global_options[:ymlfiles_path]})
-    switch_info = {command: "clone_new_app2", args: {host_path: global_options[:host_path], db: options[:db], rspec: options[:rspec], cucumber: options[:cucumber]} }
+    switch_info = {command: "clone_new_app2", args: {host_path: global_options[:host_path], ruby_version: options[:ruby_version], db: options[:db], rspec: options[:rspec], cucumber: options[:cucumber]} }
     s.send(switch_info)
 
     STDOUT.puts Rainbow("Success: 'clone_new_app2' command completed").bright.green

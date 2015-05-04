@@ -98,8 +98,12 @@ module Deploysuite
 
 			File.open(gemfile, "w") do |f| 
 				f.puts new_contents
-			end
-			
+			end			
+		end
+
+		def create_sticky_gemset(ruby_version, host_name)
+			cmd = "rvm use ruby-#{ruby_version}@#{host_name} --ruby-version --create"
+			open3method(cmd, 'out')		
 		end
 	end
 end

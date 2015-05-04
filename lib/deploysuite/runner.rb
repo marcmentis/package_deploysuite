@@ -104,6 +104,12 @@ module Deploysuite
 			$stdout.puts Rainbow("Success: 'deploysuite' run from root dir of app: '#{host_path}'").green
 		end
 
+		def run_create_sticky_gemset(ruby_version, host_path)
+			host_name = v.get_app_name(host_path)
+			u.create_sticky_gemset(ruby_version, host_name)
+			$stdout.puts Rainbow("Success: Sticky RVM Gemset created for host")
+		end
+
 		def run_bundle
 			r.bundle
 			$stdout.puts Rainbow("Success: Production env 'bundle' command run for app").green
