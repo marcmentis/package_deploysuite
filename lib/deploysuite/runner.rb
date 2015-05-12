@@ -104,11 +104,11 @@ module Deploysuite
 			$stdout.puts Rainbow("Success: 'deploysuite' run from root dir of app: '#{host_path}'").green
 		end
 
-		def run_create_sticky_gemset(ruby_version, host_path)
-			host_name = v.get_app_name(host_path)
-			u.create_sticky_gemset(ruby_version, host_name)
-			$stdout.puts Rainbow("Success: Sticky RVM Gemset created for host")
-		end
+		# def run_create_sticky_gemset(ruby_version, host_path)
+		# 	host_name = v.get_app_name(host_path)
+		# 	u.create_sticky_gemset(ruby_version, host_name)
+		# 	$stdout.puts Rainbow("Success: Sticky RVM Gemset created for host")
+		# end
 
 		def run_bundle
 			r.bundle
@@ -116,6 +116,7 @@ module Deploysuite
 		end
 
 		def run_precompile_assets
+			$stdout.puts Rainbow("Precompiling assets ...").green
 			r.precompile_assets
 			$stdout.puts Rainbow("Success: Production env assets precompiled for app").green
 		end
@@ -153,6 +154,20 @@ module Deploysuite
 		def run_start_application
 			u.start_application
 			$stdout.puts Rainbow("Success: Application restarted").green
+		end
+
+		def run_copy_structure_sql(host_path)
+			user = ev.user
+			app = v.get_app_name(host_path)
+			u.copy_structure_sql(host_path, user, app)
+			$stdout.puts Rainbow("Success: structure.sql file copied to /rails/.sql").green
+		end
+
+		def run_copy_upgrade_sql(host_path)
+			user = ev.user
+			app = v.get_app_name(host_path)
+			u.copy_upgrade_sql(host_path, user, app)
+			$stdout.puts Rainbow("Success: upgrade.sql file copied to /rails/.sql").green
 		end
 
 		def run_rspec_tests

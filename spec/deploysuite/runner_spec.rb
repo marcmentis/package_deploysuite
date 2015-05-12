@@ -89,13 +89,29 @@ module Deploysuite
 				@UtilsProxy.stub(:change_gemfile_source)
 				@r.run_change_gemfile_source('stub-host_path')
 			end
-			it "create sticky gemset" do
-				v = double()
-				v.stub(:get_app_name)
-				@UtilsProxy.stub(:create_sticky_gemset)
-				r = Runner.new(utils_proxy: @UtilsProxy, validator: v)
-				r.run_create_sticky_gemset('ruby_version', 'host_path')
+			it "copy structure.sql to change SQL folder" do
+				# exists in root/db/structure.sql
+				@UtilsProxy.stub(:copy_structure_sql)
+				@env_values.stub(:user)
+				@validator.stub(:get_app_name)
+				@r.run_copy_structure_sql('stub_host_path')
+
 			end
+			it "copy upgrade.sql to change SQL folder" do
+				# exists in <railsroot/upgrade.sql
+				@UtilsProxy.stub(:copy_update_sql)
+				@env_values.stub(:user)
+				@validator.stub(:get_app_name)
+				@r.run_copy_update_sql('stub_host_path')
+			end
+			
+			# it "create sticky gemset" do
+			# 	v = double()
+			# 	v.stub(:get_app_name)
+			# 	@UtilsProxy.stub(:create_sticky_gemset)
+			# 	r = Runner.new(utils_proxy: @UtilsProxy, validator: v)
+			# 	r.run_create_sticky_gemset('ruby_version', 'host_path')
+			# end
 		end	
 
 		# context "Outgoing message from Runner to EncProxy" do

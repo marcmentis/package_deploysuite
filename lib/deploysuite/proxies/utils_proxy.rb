@@ -101,10 +101,26 @@ module Deploysuite
 			end			
 		end
 
-		def create_sticky_gemset(ruby_version, host_name)
-			# cmd = "rvm use ruby-#{ruby_version}@#{host_name} --ruby-version --create"
-			# open3method(cmd, 'out')	
-			`rvm use ruby-#{ruby_version}@#{host_name} --ruby-version --create`	
+		def copy_structure_sql(host_path, user, app)
+			time = Time.new
+			now = time.strftime("%Y-%m-%d_%H:%M:%S")
+			final_path = "/rails/.sql/#{app}_#{user}_#{now}_structure.sql"
+			cmd = "cp #{host_path}/db/structure.sql #{final_path}"
+			open3method(cmd)
 		end
+
+		def copy_upgrade_sql(host_path, user, app)
+			time = Time.new
+			now = time.strftime("%Y-%m-%d_%H:%M:%S")
+			final_path = "/rails/.sql/#{app}_#{user}_#{now}_update.sql"
+			cmd = "cp #{host_path}/upgrade.sql #{final_path}"
+			open3method(cmd)
+		end
+
+		# def create_sticky_gemset(ruby_version, host_name)
+		# 	# cmd = "rvm use ruby-#{ruby_version}@#{host_name} --ruby-version --create"
+		# 	# open3method(cmd, 'out')	
+		# 	`rvm use ruby-#{ruby_version}@#{host_name} --ruby-version --create`	
+		# end
 	end
 end

@@ -25,7 +25,7 @@ module CommonDeployer
 		r.run_check_pwd(args[:host_path])
 		r.run_change_gemfile_source(args[:host_path])
 		# Add [and create] sticky gemset
-		r.run_create_sticky_gemset(args[:ruby_version], args[:host_path]) if args[:ruby_version]
+		# r.run_create_sticky_gemset(args[:ruby_version], args[:host_path]) if args[:ruby_version]
 			# rvm use ruby-2.0.0@<appname> --ruby-version --create
 	    r.run_bundle
 	      # r.run_create_deploy_level_db_params(args[:path_to_files_config])
