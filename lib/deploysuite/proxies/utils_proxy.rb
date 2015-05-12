@@ -112,7 +112,7 @@ module Deploysuite
 		def copy_upgrade_sql(host_path, user, app)
 			time = Time.new
 			now = time.strftime("%Y-%m-%d_%H:%M:%S")
-			final_path = "/rails/.sql/#{app}_#{user}_#{now}_update.sql"
+			final_path = "/rails/.sql/#{app}_#{user}_#{now}_upgrade.sql"
 			cmd = "cp #{host_path}/upgrade.sql #{final_path}"
 			open3method(cmd)
 		end

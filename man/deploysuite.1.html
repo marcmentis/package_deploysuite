@@ -59,7 +59,7 @@
     <a href="#FILES">FILES</a>
     <a href="#OPTIONS">OPTIONS</a>
     <a href="#EXAMPLES">EXAMPLES</a>
-    <a href="#ENVIRONMENT">ENVIRONMENT</a>
+    <a href="#ENVIRONMENT-">ENVIRONMENT:</a>
     <a href="#BUGS">BUGS</a>
     <a href="#LICENSE">LICENSE</a>
     <a href="#AUTHOR">AUTHOR</a>
@@ -85,7 +85,26 @@
 
 <p><strong>deploysuite</strong> is a command-suite app to simplify<br />
 (i) <strong>deploying</strong> code to dev, qa, and prod servers from a canonical source (i.e. GitHub/GitLab)<br />
-(ii) <strong>creating</strong> an encrypted file containing sensitive information accessed by applications.</p>
+(ii) <strong>creating</strong> an encrypted file containing sensitive information accessed by applications.<br /><br /></p>
+
+<p><strong>High level overview of workflow</strong><br />
+  1. <strong>Encrypt</strong> sensitive information<br />
+  &nbsp;&nbsp;&nbsp; i) Complete <strong>rails_db.yml</strong> file and place in <strong>.vault</strong> directory<br />
+  &nbsp;&nbsp;&nbsp; ii) Run <strong>encrypt_db</strong><br />
+  &nbsp;&nbsp;&nbsp; iii) Repeat whenever sensitive information changes<br />
+  2. <strong>Deploy New Application</strong> <br />
+  &nbsp;&nbsp;&nbsp; i) Run <strong>clone_new_app</strong> from anywhere <br />
+  &nbsp;&nbsp;&nbsp; ii) Run <strong>clone_new_app2</strong> from root of app <br />
+  &nbsp;&nbsp;&nbsp; iii) Run once to create an instance of the application<br />
+  &nbsp;&nbsp;&nbsp;&nbsp; <var>dev</var>: Db tables will be automatically created. <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; <var>qa</var> &amp; <var>prod</var>: <strong>structure.sql</strong> (sql script) placed in <strong>/rails/.sql</strong>  <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; Tables to be created using this script. <br />
+  3. <strong>Update Existing Application</strong> <br />
+  &nbsp;&nbsp;&nbsp; i) Run <strong>update_app</strong> from root of application <br />
+  &nbsp;&nbsp;&nbsp; ii) Repeat whenever code or DB changes <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; <var>dev</var>: Db tables will be automatically changed. <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; <var>qa</var> &amp; <var>prod</var>: <strong>upgrade.sql</strong> (sql script) placed in <strong>/rails/.sql</strong>  <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; Tables to be changed using this script. <br /></p>
 
 <h2 id="FILES">FILES</h2>
 
@@ -114,13 +133,38 @@ When used directly after a <code>command</code> prints, relative for that comman
 <code>deploysuite</code> --host_path --ymlfiles_path <code>update_app</code> -m|--message --[no-]db --[no-]rspec --[no-]cucumber<br />
 <code>deploysuite</code> --ymlfiles_path <code>encrypt_db</code></p>
 
-<h2 id="ENVIRONMENT">ENVIRONMENT</h2>
+<h2 id="ENVIRONMENT-">ENVIRONMENT:</h2>
+
+<h3 id="Files-to-be-created-that-are-used-by-deploysuite">Files to be created that are used by deploysuite</h3>
+
+<dl>
+<dt>rails_ymlfiles.yml</dt><dd>YML file - completed by <var>railsdep</var> group. Contains absolute paths to the following files: rails_db.yml, rails_cipher.yml, temp_db.yml, encrypted_db.yml, decryption_test.yml, rails_machines.yml, sql.rake</dd>
+<dt>rails_machines.yml</dt><dd>YML file - completed by <var>railsdep</var> group. Contains names of all machines hosting Rails applications. Machines are categorized as <var>dev</var>, <var>qa</var>, or <var>prod</var> <br />
+Found at /rails/.deploysuite/rails_machines.yml</dd>
+<dt>sql.rake</dt><dd>Rake file - has been entered by Marc Mentis MD. Contains rake task responsible for DB sql script generation. <br />
+Found at /rails/.deploysuite/sql.rake</dd>
+<dt>rails_db.yml</dt><dd>YML file completed by <var>railsenc</var> group. Contains sensitive database information. <br />
+Default at /rails/.vault/rails_ymlfile.yml - likely changed to another path</dd>
+<dt>rails_cipher.yml</dt><dd>YML file completed by Marc Mentis MD. Contains the key, initial value, and algorithm for encryption <br />
+Found at /rails/.vault2/rails_cipher.yml</dd>
+</dl>
+
+
+<h3 id="Files-that-are-automatically-created">Files that are automatically created</h3>
+
+<dl>
+<dt>encrypted_db.yml</dt><dd>YML file created by running <strong>encrypt_db</strong>. Contains the cipherscript of the rails_db.yml file. Accessed by all applications on web startup. <br />
+Found at /rails/.deploysuites/encrypted_db.yml</dd>
+</dl>
+
 
 <h2 id="BUGS">BUGS</h2>
 
 <h2 id="LICENSE">LICENSE</h2>
 
 <h2 id="AUTHOR">AUTHOR</h2>
+
+<p>Marc J Mentis MD</p>
 
 <h2 id="COPYRIGHT">COPYRIGHT</h2>
 
@@ -129,7 +173,7 @@ When used directly after a <code>command</code> prints, relative for that comman
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>April 2015</li>
+    <li class='tc'>May 2015</li>
     <li class='tr'>deploysuite(1)</li>
   </ol>
 

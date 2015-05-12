@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "DEPLOYSUITE" "1" "April 2015" "" ""
+.TH "DEPLOYSUITE" "1" "May 2015" "" ""
 .
 .SH "NAME"
 \fBdeploysuite\fR
@@ -17,6 +17,66 @@
 .
 .br
 (ii) \fBcreating\fR an encrypted file containing sensitive information accessed by applications\.
+.
+.br
+.
+.br
+.
+.P
+\fBHigh level overview of workflow\fR
+.
+.br
+1\. \fBEncrypt\fR sensitive information
+.
+.br
+\~\~\~ i) Complete \fBrails_db\.yml\fR file and place in \fB\.vault\fR directory
+.
+.br
+\~\~\~ ii) Run \fBencrypt_db\fR
+.
+.br
+\~\~\~ iii) Repeat whenever sensitive information changes
+.
+.br
+2\. \fBDeploy New Application\fR
+.
+.br
+\~\~\~ i) Run \fBclone_new_app\fR from anywhere
+.
+.br
+\~\~\~ ii) Run \fBclone_new_app2\fR from root of app
+.
+.br
+\~\~\~ iii) Run once to create an instance of the application
+.
+.br
+\~\~\~\~ \fIdev\fR: Db tables will be automatically created\.
+.
+.br
+\~\~\~\~ \fIqa\fR & \fIprod\fR: \fBstructure\.sql\fR (sql script) placed in \fB/rails/\.sql\fR
+.
+.br
+\~\~\~\~ Tables to be created using this script\.
+.
+.br
+3\. \fBUpdate Existing Application\fR
+.
+.br
+\~\~\~ i) Run \fBupdate_app\fR from root of application
+.
+.br
+\~\~\~ ii) Repeat whenever code or DB changes
+.
+.br
+\~\~\~\~ \fIdev\fR: Db tables will be automatically changed\.
+.
+.br
+\~\~\~\~ \fIqa\fR & \fIprod\fR: \fBupgrade\.sql\fR (sql script) placed in \fB/rails/\.sql\fR
+.
+.br
+\~\~\~\~ Tables to be changed using this script\.
+.
+.br
 .
 .SH "FILES"
 \fB/rails/\.deploysuite/rails_ymlfiles\.yml\fR is used for master config\.yml file if \fB\-y|\-\-ymlfiles_path\fR is omitted\.
@@ -74,13 +134,57 @@ Run cucumber tests for application
 .br
 \fBdeploysuite\fR \-\-ymlfiles_path \fBencrypt_db\fR
 .
-.SH "ENVIRONMENT"
+.SH "ENVIRONMENT:"
+.
+.SS "Files to be created that are used by deploysuite"
+.
+.TP
+rails_ymlfiles\.yml
+YML file \- completed by \fIrailsdep\fR group\. Contains absolute paths to the following files: rails_db\.yml, rails_cipher\.yml, temp_db\.yml, encrypted_db\.yml, decryption_test\.yml, rails_machines\.yml, sql\.rake
+.
+.TP
+rails_machines\.yml
+YML file \- completed by \fIrailsdep\fR group\. Contains names of all machines hosting Rails applications\. Machines are categorized as \fIdev\fR, \fIqa\fR, or \fIprod\fR
+.
+.br
+Found at /rails/\.deploysuite/rails_machines\.yml
+.
+.TP
+sql\.rake
+Rake file \- has been entered by Marc Mentis MD\. Contains rake task responsible for DB sql script generation\.
+.
+.br
+Found at /rails/\.deploysuite/sql\.rake
+.
+.TP
+rails_db\.yml
+YML file completed by \fIrailsenc\fR group\. Contains sensitive database information\.
+.
+.br
+Default at /rails/\.vault/rails_ymlfile\.yml \- likely changed to another path
+.
+.TP
+rails_cipher\.yml
+YML file completed by Marc Mentis MD\. Contains the key, initial value, and algorithm for encryption
+.
+.br
+Found at /rails/\.vault2/rails_cipher\.yml
+.
+.SS "Files that are automatically created"
+.
+.TP
+encrypted_db\.yml
+YML file created by running \fBencrypt_db\fR\. Contains the cipherscript of the rails_db\.yml file\. Accessed by all applications on web startup\.
+.
+.br
+Found at /rails/\.deploysuites/encrypted_db\.yml
 .
 .SH "BUGS"
 .
 .SH "LICENSE"
 .
 .SH "AUTHOR"
+Marc J Mentis MD
 .
 .SH "COPYRIGHT"
 .

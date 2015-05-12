@@ -8,7 +8,24 @@
 (i) **deploying** code to dev, qa, and prod servers from a canonical source (i.e. GitHub/GitLab)<br> 
 (ii) **creating** an encrypted file containing sensitive information accessed by applications.<br><br>
 
-**High level overview of workflow**
+**High level overview of workflow**<br>
+  1. **Encrypt** sensitive information<br>
+  &nbsp;&nbsp;&nbsp; i) Complete **rails_db.yml** file and place in **.vault** directory<br>
+  &nbsp;&nbsp;&nbsp; ii) Run **encrypt_db**<br>
+  &nbsp;&nbsp;&nbsp; iii) Repeat whenever sensitive information changes<br>
+  2. **Deploy New Application** <br/>
+  &nbsp;&nbsp;&nbsp; i) Run **clone_new_app** from anywhere <br/>
+  &nbsp;&nbsp;&nbsp; ii) Run **clone_new_app2** from root of app <br/>
+  &nbsp;&nbsp;&nbsp; iii) Run once to create an instance of the application<br/>
+  &nbsp;&nbsp;&nbsp;&nbsp; <dev>: Db tables will be automatically created. <br>
+  &nbsp;&nbsp;&nbsp;&nbsp; <qa> & <prod>: **structure.sql** (sql script) placed in **/rails/.sql**  <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; Tables to be created using this script. <br/> 
+  3. **Update Existing Application** <br/>
+  &nbsp;&nbsp;&nbsp; i) Run **update_app** from root of application <br/>
+  &nbsp;&nbsp;&nbsp; ii) Repeat whenever code or DB changes <br/>
+  &nbsp;&nbsp;&nbsp;&nbsp; <dev>: Db tables will be automatically changed. <br>
+  &nbsp;&nbsp;&nbsp;&nbsp; <qa> & <prod>: **upgrade.sql** (sql script) placed in **/rails/.sql**  <br />
+  &nbsp;&nbsp;&nbsp;&nbsp; Tables to be changed using this script. <br/> 
 
 
 
@@ -44,13 +61,35 @@
 `deploysuite` --host_path --ymlfiles_path `update_app` -m|--message --[no-]db --[no-]rspec --[no-]cucumber<br>
 `deploysuite` --ymlfiles_path `encrypt_db`
 
-## ENVIRONMENT
+## ENVIRONMENT:
+### Files to be created that are used by deploysuite
+  * rails_ymlfiles.yml:
+    YML file - completed by <railsdep> group. Contains absolute paths to the following files: rails_db.yml, rails_cipher.yml, temp_db.yml, encrypted_db.yml, decryption_test.yml, rails_machines.yml, sql.rake
+  * rails_machines.yml:
+    YML file - completed by <railsdep> group. Contains names of all machines hosting Rails applications. Machines are categorized as <dev>, <qa>, or <prod> <br>
+    Found at /rails/.deploysuite/rails_machines.yml
+  * sql.rake:
+    Rake file - has been entered by Marc Mentis MD. Contains rake task responsible for DB sql script generation. <br>
+    Found at /rails/.deploysuite/sql.rake
+  * rails_db.yml:
+    YML file completed by <railsenc> group. Contains sensitive database information. <br>
+    Default at /rails/.vault/rails_ymlfile.yml - likely changed to another path
+  * rails_cipher.yml:
+    YML file completed by Marc Mentis MD. Contains the key, initial value, and algorithm for encryption <br>
+    Found at /rails/.vault2/rails_cipher.yml
+
+### Files that are automatically created
+  * encrypted_db.yml:
+    YML file created by running **encrypt_db**. Contains the cipherscript of the rails_db.yml file. Accessed by all applications on web startup. <br>
+    Found at /rails/.deploysuites/encrypted_db.yml
+
 
 ## BUGS
 
 ## LICENSE
 
-## AUTHOR
+## AUTHOR 
+Marc J Mentis MD
 
 ## COPYRIGHT
 
