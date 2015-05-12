@@ -8,7 +8,8 @@
 (i) **deploying** code to dev, qa, and prod servers from a canonical source (i.e. GitHub/GitLab)<br> 
 (ii) **creating** an encrypted file containing sensitive information accessed by applications.<br><br>
 
-something
+**High level overview of workflow**
+
 
 
 
