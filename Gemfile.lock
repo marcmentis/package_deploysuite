@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    deploysuite (0.0.30)
+    deploysuite (0.0.32)
       gem-man (= 0.3.0)
       gli (= 2.12.2)
       rainbow
@@ -33,7 +33,7 @@ GEM
     json (1.8.2)
     multi_json (1.10.1)
     multi_test (0.1.2)
-    mustache (1.0.0)
+    mustache (1.0.2)
     rainbow (2.0.0)
     rake (10.4.2)
     rdiscount (2.1.8)
